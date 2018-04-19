@@ -6,9 +6,9 @@ if (! function_exists('view')) {
     function view($view, $data = []):void
     {
         if(getenv('FRAMEWORK') == 'developer'){
-            $path_to_views = realpath(__DIR__ . '/../../../resources/views');
+            $path_to_views = realpath(__DIR__ . '/../../resources/views');
         }else{
-            $path_to_views = realpath(__DIR__.'/../../../../../../resources/views');
+            $path_to_views = realpath(__DIR__.'/../../../../../resources/views');
         }
 
         $template = getenv('TEMPLATE_ENGINE');

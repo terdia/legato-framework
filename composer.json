@@ -17,7 +17,7 @@
         "psr-4": {
             "Legato\\Framework\\":""
         },
-        "files":["framework/src/functions/helpers.php"]
+        "files":["src/functions/helpers.php"]
     },
     "autoload-dev": {
         "psr-4": {
