@@ -3,7 +3,7 @@ namespace Legato\Framework;
 
 use Legato\Framework\Session\SessionManager;
 
-class TwigGlobal extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+class TwigGlobal extends AbstractTwigGlobal
 {
     use SessionManager;
 

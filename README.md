@@ -1,2 +1,1 @@
-# harmony-framework
-Devscreencast PHP framework
+# Legato PHP Framework
