@@ -2,4 +2,9 @@ vendor
 .env
 public
 resources
+.idea
+composer.lock
+config
+cache
+routes
 
