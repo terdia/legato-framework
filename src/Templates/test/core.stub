@@ -1,0 +1,17 @@
+<?php
+namespace Framework\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+class DummyTest extends TestCase
+{
+
+    /**
+     * @test
+     */
+    public function create_something()
+    {
+        $this->assertTrue(true);
+    }
+
+}
