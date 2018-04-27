@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class CreatePhpUnitTest extends Command
+class CreatePhpUnitTest extends Command implements TemplateGenerator
 {
     /**
      *
@@ -86,7 +86,7 @@ class CreatePhpUnitTest extends Command
      *
      * @return string
      */
-    protected function getTemplate()
+    public function getTemplate()
     {
         if($this->filesystem->exists(realpath(__DIR__ . '/../../../../../tests'))){
             return __DIR__ . '/../Templates/test/phpunit.stub';
@@ -101,7 +101,7 @@ class CreatePhpUnitTest extends Command
      * @param $target
      * @return mixed
      */
-    protected function findTemplateAndReplacePlaceHolders($search, $replace, $target)
+    public function findTemplateAndReplacePlaceHolders($search, $replace, $target)
     {
         return str_replace($search, $replace, $target);
     }

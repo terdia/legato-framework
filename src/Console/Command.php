@@ -38,18 +38,4 @@ abstract class Command extends SymfonyCommand
         }
         $this->addArgument($name, $required, $description);
     }
-    
-    /**
-     * @return mixed
-     */
-    protected abstract function getTemplate();
-    
-    /**
-     * @param $search
-     * @param $replace
-     * @param $target
-     * @return mixed
-     */
-    protected abstract function findTemplateAndReplacePlaceHolders($search, $replace, $target);
-    
 }
