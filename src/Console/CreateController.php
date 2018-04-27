@@ -28,11 +28,14 @@ class CreateController extends Command implements TemplateGenerator
     {
         parent::__construct($name);
         $this->setArguments('className', true, 'The controller name or path');
-        
-        if(isset($this->filesystem)){
+    
+        if(property_exists(self::class, 'filesystem'))
+        {
             $this->filesystem = new Filesystem;
         }
-        if(isset($this->basePath)){
+    
+        if(property_exists(self::class, 'basePath'))
+        {
             $this->basePath = $this->getBasePath();
         }
     }

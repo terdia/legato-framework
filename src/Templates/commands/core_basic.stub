@@ -26,8 +26,15 @@ class PlaceHolder extends Command
         parent::__construct($name);
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
-    {
-        //
-    }
+   /**
+    * You command logic
+    *
+    * @param InputInterface $input
+    * @param OutputInterface $output
+    * @return void
+    */
+   public function execute(InputInterface $input, OutputInterface $output)
+   {
+       //
+   }
 }
