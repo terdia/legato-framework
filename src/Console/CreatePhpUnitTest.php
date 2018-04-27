@@ -75,7 +75,7 @@ class CreatePhpUnitTest extends Command
     private function getBasePath()
     {
         if($this->filesystem->exists(realpath(__DIR__ . '/../../../../../tests'))){
-            return __DIR__ . '/../../../../../test';
+            return __DIR__ . '/../../../../../tests';
         }
         
         return realpath(__DIR__ . '/../../Tests');
