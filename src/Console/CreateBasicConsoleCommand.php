@@ -6,15 +6,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class CreatePhpUnitTest extends Command implements TemplateGenerator
+class CreateBasicConsoleCommand extends Command implements TemplateGenerator
 {
     /**
      *
      * @var string
      */
-    protected $commandName = 'add:unitTest';
+    protected $commandName = 'add:command';
     
-    protected $description = 'Create a new phpunit test class';
+    protected $description = 'Create a console command';
     
     protected $filesystem;
     
@@ -23,52 +23,47 @@ class CreatePhpUnitTest extends Command implements TemplateGenerator
     public function __construct($name = null)
     {
         parent::__construct($name);
-        $this->setArguments('className', true, 'The phpunit filename or path');
-        
-        if(isset($this->filesystem)){
-            $this->filesystem = new Filesystem;
-        }
-        if(isset($this->basePath)){
-            $this->basePath = $this->getBasePath();
-        }
+        $this->setArguments('className', true, 'The command class name or path');
+        $this->filesystem = new Filesystem;
+        $this->basePath = $this->getBasePath();
     }
     
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $argument = $input->getArgument('className');
         $path = $this->basePath . '/' . $argument . '.php';
-        
+    
         if($this->filesystem->exists($path)){
-            $output->writeln( $argument . ' test already exist');
+            $output->writeln( $argument . ' command already exist');
             return false;
         }
-        
+    
         $folder_name = explode('/', $argument);
         $folder = '';
-        
+    
         if(count($folder_name) > 1){
             $folder_path = array_slice($folder_name, 0, -1);
-            
+        
             foreach ($folder_path as $f){
                 $folder .= "$f/";
             }
-            
+        
             $filename = end($folder_name);
-            
+        
         }else{
             $filename = $argument;
         }
-        
+    
         $folder ? $controller = "$this->basePath/$folder/$filename.php":
             $controller = "$this->basePath/$filename.php";
         
-        $template = $this->findTemplateAndReplacePlaceHolders('DummyTest',
+        $template = $this->findTemplateAndReplacePlaceHolders('PlaceHolder',
             $filename,
             file_get_contents($this->getTemplate())
         );
         
         $this->filesystem->dumpFile($controller, $template);
-        $output->writeln("$filename created successfully");
+        $output->writeln("$filename Command created successfully");
         return true;
     }
     
@@ -79,11 +74,11 @@ class CreatePhpUnitTest extends Command implements TemplateGenerator
      */
     private function getBasePath()
     {
-        if($this->filesystem->exists(realpath(__DIR__ . '/../../../../../tests'))){
-            return __DIR__ . '/../../../../../tests';
+        if($this->filesystem->exists(realpath(__DIR__ . '/../../../../../app/commands'))){
+            return realpath(__DIR__ . '/../../../../../app/commands');
         }
         
-        return realpath(__DIR__ . '/../../Tests');
+        return realpath(__DIR__ . '/../Console');
     }
     
     /**
@@ -93,11 +88,11 @@ class CreatePhpUnitTest extends Command implements TemplateGenerator
      */
     public function getTemplate()
     {
-        if($this->filesystem->exists(realpath(__DIR__ . '/../../../../../tests'))){
-            return __DIR__ . '/../Templates/test/phpunit.stub';
+        if($this->filesystem->exists(realpath(__DIR__ . '/../../../../../app/commands'))){
+            return __DIR__ . '/../Templates/commands/basic.stub';
         }
-        
-        return __DIR__ . '/../Templates/test/core.stub';
+    
+        return __DIR__ . '/../Templates/commands/core_basic.stub';
     }
     
     /**

@@ -7,6 +7,8 @@ class Create
     private $defaultCommands = [
         \Legato\Framework\CreateController::class,
         \Legato\Framework\CreatePhpUnitTest::class,
+        \Legato\Framework\CreateBasicConsoleCommand::class,
+        \Legato\Framework\Welcome::class,
     ];
     
     public $app;

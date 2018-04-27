@@ -14,6 +14,10 @@ class CreateController extends Command implements TemplateGenerator
      */
     protected $commandName = 'add:controller';
     
+    /**
+     * Description for thi command
+     * @var string
+     */
     protected $description = 'Create a controller class';
     
     protected $filesystem;
@@ -24,8 +28,13 @@ class CreateController extends Command implements TemplateGenerator
     {
         parent::__construct($name);
         $this->setArguments('className', true, 'The controller name or path');
-        $this->filesystem = new Filesystem;
-        $this->basePath = $this->getBasePath();
+        
+        if(isset($this->filesystem)){
+            $this->filesystem = new Filesystem;
+        }
+        if(isset($this->basePath)){
+            $this->basePath = $this->getBasePath();
+        }
     }
     
     public function execute(InputInterface $input, OutputInterface $output)
