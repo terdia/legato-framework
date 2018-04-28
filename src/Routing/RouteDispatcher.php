@@ -20,8 +20,7 @@ class RouteDispatcher
     {
         $requestMethod = $request->getMethod();
         $uri = $request->uri();
-
-
+        
         $this->container = $container;
         $this->container->bind(Request::class);
         $this->container->bind(Session::class);
@@ -43,16 +42,12 @@ class RouteDispatcher
                 break;
             case FastRoute\Dispatcher::FOUND:
                 $handler = $routeInfo[1];
-
+                
                 list($controller, $action) = explode('@', $handler);
                 $vars = $routeInfo[2];
-
-                /*$this->container->when($controller)->needs(Request::class)->give($request);
-                $this->container->when(BaseController::class)->needs(Session::class)->give($session);*/
-
+                
                 $class = $this->container->make($controller);
                 $this->container->call(array($class, $action), $vars);
-                //call_user_func_array(array(new $controller($request), $action), $vars);
                 break;
         }
     }
