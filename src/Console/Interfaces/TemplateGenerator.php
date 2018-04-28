@@ -6,9 +6,10 @@ interface TemplateGenerator
     /**
      * Get the stub for the file to be generated
      *
+     * @param $type
      * @return mixed
      */
-    public function getTemplate();
+    public function getTemplate($type = null);
     
     /**
      * @param $search
