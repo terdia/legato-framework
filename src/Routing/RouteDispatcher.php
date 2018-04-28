@@ -36,18 +36,16 @@ class RouteDispatcher
             case FastRoute\Dispatcher::NOT_FOUND:
                 die('404 Not Found');
                 break;
-            case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = $routeInfo[1];
-                die($allowedMethods.' Method not allowed for this route');
-                break;
-            case FastRoute\Dispatcher::FOUND:
-                $handler = $routeInfo[1];
                 
-                list($controller, $action) = explode('@', $handler);
-                $vars = $routeInfo[2];
+            case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+                die($routeInfo[1].' Method not allowed for this route');
+                break;
+                
+            case FastRoute\Dispatcher::FOUND:
+                list($controller, $action) = explode('@', $routeInfo[1]);
                 
                 $class = $this->container->make($controller);
-                $this->container->call(array($class, $action), $vars);
+                $this->container->call(array($class, $action), $routeInfo[2]);
                 break;
         }
     }
