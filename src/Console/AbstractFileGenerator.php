@@ -10,8 +10,20 @@ use Symfony\Component\Filesystem\Filesystem;
 class AbstractFileGenerator extends Command implements TemplateGenerator
 {
     protected $filesystem;
+    
+    /**
+     * Type of file to be generated
+     * @var string
+     */
     protected $type;
+    
     protected $basePath;
+    
+    /**
+     * Argument identifier (name)
+     * @var string
+     */
+    protected $argumentName = 'className';
     
     public function __construct()
     {
@@ -115,5 +127,19 @@ class AbstractFileGenerator extends Command implements TemplateGenerator
         );
         $this->filesystem->dumpFile($location, $template);
         return true;
+    }
+    
+    public function execute(InputInterface $input, OutputInterface $output)
+    {
+        $argument = $input->getArgument($this->argumentName);
+        $path = $this->basePath . '/' . $argument . '.php';
+        $response = $this->runFileGeneratorCommand($path, $argument);
+        
+        if($response === true){
+            $this->type ?: $this->type = "Command";
+            $output->writeln(ucfirst($this->type).' created successfully');
+            return;
+        }
+        $output->writeln($response);
     }
 }

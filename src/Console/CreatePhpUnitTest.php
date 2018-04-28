@@ -13,27 +13,20 @@ class CreatePhpUnitTest extends AbstractFileGenerator
      * @var string
      */
     protected $commandName = 'add:unitTest';
+    
     protected $description = 'Create a new phpunit test class';
+    
     protected $basePath;
     
+    /**
+     * Type of file to be generated
+     * @var string
+     */
     protected $type = 'test';
     
     public function __construct()
     {
         parent::__construct();
-        $this->setArguments('testNameInput', true, 'The phpunit filename or path');
-    }
-    
-    public function execute(InputInterface $input, OutputInterface $output)
-    {
-        $testNameInput = $input->getArgument('testNameInput');
-        $filePath = $this->basePath . '/' . $testNameInput . '.php';
-        $response = $this->runFileGeneratorCommand($filePath, $testNameInput);
-        
-        if($response === true){
-            $output->writeln('Test created successfully');
-            return;
-        }
-        $output->writeln($response);
+        $this->setArguments($this->argumentName, true, 'The phpunit filename or path');
     }
 }

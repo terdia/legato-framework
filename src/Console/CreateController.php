@@ -24,23 +24,10 @@ class CreateController extends AbstractFileGenerator
     
     protected $type = 'controller';
     
-    public function __construct($name = null)
+    public function __construct()
     {
         parent::__construct();
-        $this->setArguments('className', true, 'The controller name or path');
-    }
-    
-    public function execute(InputInterface $input, OutputInterface $output)
-    {
-        $controllerArgument = $input->getArgument('className');
-        $path = $this->basePath . '/' . $controllerArgument . '.php';
-        $response = $this->runFileGeneratorCommand($path, $controllerArgument);
-        
-        if($response === true){
-            $output->writeln('Controller created successfully');
-            return;
-        }
-        $output->writeln($response);
+        $this->setArguments($this->argumentName, true, 'The controller name or path');
     }
     
 }

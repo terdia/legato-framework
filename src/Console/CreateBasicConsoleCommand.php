@@ -21,20 +21,6 @@ class CreateBasicConsoleCommand extends AbstractFileGenerator
     public function __construct()
     {
         parent::__construct();
-        $this->setArguments('CommandNameInput', true, 'The command class name or path');
+        $this->setArguments($this->argumentName, true, 'The command class name or path');
     }
-   
-    public function execute(InputInterface $input, OutputInterface $output)
-    {
-        $CommandNameInput = $input->getArgument('CommandNameInput');
-        $commandFilePath = $this->basePath . '/' . $CommandNameInput . '.php';
-        
-        $result = $this->runFileGeneratorCommand($commandFilePath, $CommandNameInput);
-        if($result === true){
-            $output->writeln('Command created successfully');
-            return;
-        }
-        $output->writeln($result);
-    }
-    
 }
