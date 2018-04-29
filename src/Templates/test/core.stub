@@ -3,7 +3,7 @@ namespace Framework\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-class DummyTest extends TestCase
+class PlaceHolder extends TestCase
 {
 
     /**

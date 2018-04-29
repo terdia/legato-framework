@@ -20,8 +20,7 @@ class RouteDispatcher
     {
         $requestMethod = $request->getMethod();
         $uri = $request->uri();
-
-
+        
         $this->container = $container;
         $this->container->bind(Request::class);
         $this->container->bind(Session::class);
@@ -37,22 +36,16 @@ class RouteDispatcher
             case FastRoute\Dispatcher::NOT_FOUND:
                 die('404 Not Found');
                 break;
+                
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = $routeInfo[1];
-                die($allowedMethods.' Method not allowed for this route');
+                die($routeInfo[1].' Method not allowed for this route');
                 break;
+                
             case FastRoute\Dispatcher::FOUND:
-                $handler = $routeInfo[1];
-
-                list($controller, $action) = explode('@', $handler);
-                $vars = $routeInfo[2];
-
-                /*$this->container->when($controller)->needs(Request::class)->give($request);
-                $this->container->when(BaseController::class)->needs(Session::class)->give($session);*/
-
+                list($controller, $action) = explode('@', $routeInfo[1]);
+                
                 $class = $this->container->make($controller);
-                $this->container->call(array($class, $action), $vars);
-                //call_user_func_array(array(new $controller($request), $action), $vars);
+                $this->container->call(array($class, $action), $routeInfo[2]);
                 break;
         }
     }

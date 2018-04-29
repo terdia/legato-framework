@@ -6,15 +6,10 @@ use Philo\Blade\Blade;
 if (! function_exists('view')) {
     function view($view, $data = []):void
     {
-        $template = getenv('TEMPLATE_ENGINE');
-        
-        if(getenv('FRAMEWORK') == 'developer'){
-            $path_to_views = realpath(__DIR__ . '/../../resources/views');
-        }else{
+        getenv('FRAMEWORK') == 'developer'?$path_to_views = realpath(__DIR__ . '/../../resources/views'):
             $path_to_views = realpath(__DIR__.'/../../../../../resources/views');
-        }
         
-        switch ($template)
+        switch (getenv('TEMPLATE_ENGINE'))
         {
             case 'blade':
                 
