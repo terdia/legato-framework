@@ -38,3 +38,17 @@ if (! function_exists('flash')) {
         return '';
     }
 }
+
+if (! function_exists('config')) {
+    function config($key, $default = null)
+    {
+        return getenv($key) ? getenv($key) : $default;
+    }
+}
+
+if (! function_exists('filesystem')){
+    function filesystem()
+    {
+        return (new \Legato\Framework\File())->getFileSystem();
+    }
+}

@@ -9,6 +9,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class AbstractFileGenerator extends Command implements TemplateGenerator
 {
+    use CommandTemplate, FileGeneratorPath;
+    
     protected $filesystem;
     
     /**
@@ -39,30 +41,16 @@ class AbstractFileGenerator extends Command implements TemplateGenerator
             $this->basePath = $this->getBasePath($this->type);
         }
     }
+    
     /**
      * Get the stub for the file to be generated
      *
      * @param $type
      * @return mixed
      */
-    public function getTemplate($type = null)
+    public function getTemplate($type = 'command')
     {
-        switch ($type){
-            case 'controller':
-                return $this->filesystem->exists(realpath(__DIR__ . '/../../../../../app/controllers')) ?
-                    realpath(__DIR__ . '/../Templates/controller/plain.stub') :
-                    realpath(__DIR__ . '/../Templates/controller/core.stub');
-                break;
-            case 'test':
-                return $this->filesystem->exists(realpath(__DIR__ . '/../../../../../tests')) ?
-                    realpath(__DIR__ . '/../Templates/test/phpunit.stub') :
-                    (__DIR__ . '/../Templates/test/core.stub');
-                break;
-            default:
-                return $this->filesystem->exists(realpath(__DIR__ . '/../../../../../app/commands')) ?
-                    realpath(__DIR__ . '/../Templates/commands/basic.stub') :
-                    realpath(__DIR__ . '/../Templates/commands/core_basic.stub');
-        }
+        return call_user_func([$this, $type]);
     }
     
     /**
@@ -81,21 +69,9 @@ class AbstractFileGenerator extends Command implements TemplateGenerator
      * @param $type
      * @return bool|string
      */
-    protected function getBasePath($type = null)
+    protected function getBasePath($type = 'command')
     {
-        switch ($type){
-            case 'controller':
-                return $this->filesystem->exists(realpath(__DIR__ . '/../../../../../app/controllers')) ?
-                   realpath(__DIR__ . '/../../../../../app/controllers') : realpath(__DIR__ . '/../Controllers');
-                break;
-            case 'test':
-                return $this->filesystem->exists(realpath(__DIR__ . '/../../../../../tests')) ?
-                    realpath(__DIR__ . '/../../../../../tests') : realpath(__DIR__ . '/../../Tests');
-                break;
-            default:
-                return $this->filesystem->exists(realpath(__DIR__ . '/../../../../../app/commands')) ?
-                    realpath(__DIR__ . '/../../../../../app/commands') : realpath(__DIR__ . '/../Console');
-        }
+        return call_user_func([$this, 'get'.ucfirst($type).'Path']);
     }
     
     /**
