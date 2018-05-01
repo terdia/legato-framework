@@ -2,10 +2,6 @@
 
 namespace Legato\Framework;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-
 class CreateBasicConsoleCommand extends AbstractFileGenerator
 {
     /**
@@ -17,6 +13,8 @@ class CreateBasicConsoleCommand extends AbstractFileGenerator
     protected $description = 'Create a console command';
     
     protected $basePath;
+    
+    protected $type = 'command';
     
     public function __construct()
     {
