@@ -8,6 +8,7 @@ class Create
         \Legato\Framework\CreateController::class,
         \Legato\Framework\CreatePhpUnitTest::class,
         \Legato\Framework\CreateBasicConsoleCommand::class,
+        \Legato\Framework\WelcomeCommand::class,
     ];
     
     public $app;
