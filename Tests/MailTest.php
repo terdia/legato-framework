@@ -24,7 +24,7 @@ class MailTest extends TestCase
         $file = __DIR__.'/../phpunit-book.pdf';
 
         $params = [
-            'to' => ['nameterdia@icloud.com' => 'Legato Framework'],
+            'to' => ['to_email' => 'Legato Framework'],
             'from' => ['no-reply@devscreencast.com' => 'Devscreencast, Inc'],
             'subject' => 'Testing from Legato Framework',
             'body' => ['address' => '20 Dawson road', 'name' => 'Jake Pattern'],
