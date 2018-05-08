@@ -7,4 +7,5 @@ composer.lock
 config
 cache
 routes
+*.pdf
 
