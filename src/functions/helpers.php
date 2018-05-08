@@ -52,3 +52,26 @@ if (! function_exists('filesystem')){
         return (new \Legato\Framework\File())->getFileSystem();
     }
 }
+
+/**
+ * Send email from a file
+ */
+if (! function_exists('makeMail') )
+{
+    function makeMail($path, $data)
+    {
+        extract($data);
+        ob_start();
+
+        if(filesystem()->exists(realpath(__DIR__.'/../../../../../resources/views')))
+        {
+            include( __DIR__.'/../../../../../resources/views/'. $path );
+        }else{
+            include(__DIR__.'/../../resources/views/'.$path);
+        }
+
+        $content = ob_get_contents();
+        ob_end_clean();
+        return $content;
+    }
+}
