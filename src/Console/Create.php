@@ -10,6 +10,7 @@ class Create
         \Legato\Framework\CreateBasicConsoleCommand::class,
         \Legato\Framework\WelcomeCommand::class,
         \Legato\Framework\CreateModel::class,
+        \Legato\Framework\StartApp::class,
     ];
     
     public $app;
