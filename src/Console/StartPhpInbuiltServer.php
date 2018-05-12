@@ -5,7 +5,7 @@ namespace Legato\Framework;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StartApp extends Command
+class StartPhpInbuiltServer extends Command
 {
     /**
      * Identifier for the console command
