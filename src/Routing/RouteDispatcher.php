@@ -19,7 +19,7 @@ class RouteDispatcher
                                 Session $session, $dispatcher)
     {
         $requestMethod = $request->getMethod();
-        $uri = $request->uri();
+        $uri = $this->getUri($request->uri());
         
         $this->container = $container;
         $this->container->bind(Request::class);
@@ -74,5 +74,39 @@ class RouteDispatcher
                 $this->handle($routeInfo[1], $routeInfo[2]);
                 break;
         }
+    }
+
+    /**
+     * We attempt to parse direct request to localhost/public/
+     * or localhost/public//index.php
+     *
+     * @param $uri
+     * @return bool|string
+     */
+    private function prepareUriForLocalhostAccess($uri)
+    {
+        $public = 'public';
+        $index = 'index.php';
+
+        if(strpos($uri, $index))
+        {
+            return substr($uri, strpos($uri, $index) + strlen($index));
+        }
+
+        return substr($uri, strpos($uri, $public) + strlen($public));
+    }
+
+    /**
+     * Get the request uri
+     *
+     * @param $uri
+     * @return bool|string
+     */
+    private function getUri($uri)
+    {
+        if($this->prepareUriForLocalhostAccess($uri)){
+            return $uri = $this->prepareUriForLocalhostAccess($uri);
+        }
+        return $uri;
     }
 }
