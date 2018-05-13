@@ -16,8 +16,7 @@ class Rule
     public function unique($column, $value, $policy)
     {
         if($value != null && !empty(trim($value))){
-            //return !DB::table($policy)->where($column, '=', $value)->exists();
-            return false;
+            return !DB::table($policy)->where($column, '=', $value)->exists();
         }
         return true;
     }
