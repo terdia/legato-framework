@@ -25,7 +25,7 @@ class Validator
         $field = $data['field'];
 
         foreach ($data['policies'] as $rule => $policy){
-            $passes = call_user_func_array([Rule::class, $rule], [$field, $data['value'], $policy]);
+            $passes = call_user_func_array([new Rule, $rule], [$field, $data['value'], $policy]);
 
             if(!$passes){
                 ErrorHandler::set(
