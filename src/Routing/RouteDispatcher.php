@@ -2,11 +2,10 @@
 
 namespace Legato\Framework\Routing;
 
-use FastRoute;
-
 use Legato\Framework\Request;
 use Illuminate\Container\Container;
 use Symfony\Component\HttpFoundation\Session\Session;
+use AltoRouter;
 
 class RouteDispatcher
 {
@@ -16,23 +15,28 @@ class RouteDispatcher
     protected $dispatcher;
 
     public function __construct(Request $request, Container $container,
-                                Session $session, $dispatcher)
+                                Session $session, AltoRouter $router)
     {
-        $requestMethod = $request->getMethod();
-        $uri = $this->getUri($request->uri());
-        
-        $this->container = $container;
-        $this->container->bind(Request::class);
-        $this->container->bind(Session::class);
 
-        // Strip query string (?foo=bar) and decode URI
-        if (false !== $pos = strpos($uri, '?')) {
-            $uri = substr($uri, 0, $pos);
+        /**
+         * if the user is accessing the app via localhost/project/public
+         * we set the parse the request uri so that it matches a defined route
+         */
+        $this->setRequestUri($request->uri());
+
+        $this->dispatcher = $router->match();
+
+        if($this->dispatcher){
+            $this->container = $container;
+            $this->container->isShared(Request::class);
+            $this->container->bind(Session::class);
+
+            $this->handle($this->dispatcher['target'], $this->dispatcher['params']);
+        }else{
+            header($_SERVER['SERVER_PROTOCOL'].'404 Not Found');
+            view('errors/404');
         }
-        $uri = rawurldecode($uri);
 
-        $routeInfo = $dispatcher->dispatch($requestMethod, $uri);
-        $this->match($routeInfo);
     }
 
     /**
@@ -55,30 +59,8 @@ class RouteDispatcher
     }
 
     /**
-     * Match route and execute found request
-     *
-     * @param $routeInfo
-     */
-    public function match($routeInfo)
-    {
-        switch ($routeInfo[0]) {
-            case FastRoute\Dispatcher::NOT_FOUND:
-                die('404 Not Found');
-                break;
-
-            case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                die($routeInfo[1].' Method not allowed for this route');
-                break;
-
-            case FastRoute\Dispatcher::FOUND:
-                $this->handle($routeInfo[1], $routeInfo[2]);
-                break;
-        }
-    }
-
-    /**
      * We attempt to parse direct request to localhost/public/
-     * or localhost/public//index.php
+     * or localhost/public/index.php
      *
      * @param $uri
      * @return bool|string
@@ -91,22 +73,22 @@ class RouteDispatcher
         if(strpos($uri, $index))
         {
             return substr($uri, strpos($uri, $index) + strlen($index));
+        }else if(strpos($uri, $public))
+        {
+            return substr($uri, strpos($uri, $public) + strlen($public));
         }
 
-        return substr($uri, strpos($uri, $public) + strlen($public));
+        return false;
     }
-
     /**
      * Get the request uri
      *
      * @param $uri
-     * @return bool|string
      */
-    private function getUri($uri)
+    private function setRequestUri($uri)
     {
         if($this->prepareUriForLocalhostAccess($uri)){
-            return $uri = $this->prepareUriForLocalhostAccess($uri);
+            $_SERVER['REQUEST_URI'] = $this->prepareUriForLocalhostAccess($uri);
         }
-        return $uri;
     }
 }

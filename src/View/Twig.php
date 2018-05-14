@@ -16,7 +16,7 @@ class Twig extends View
         $twig->addExtension(new TwigGlobal);
     
         try{
-            echo $twig->render($view, $data);
+            echo $twig->render($view.'.twig', $data);
         }catch (\Exception $exception){
             die($exception->getMessage());
         }
