@@ -6,19 +6,19 @@ use Symfony\Component\HttpFoundation\Request as HttpFoundation;
 
 class Request extends HttpFoundation
 {
-    public $request;
+    public $instance;
     public $response;
 
     public function __construct()
     {
         parent::__construct();
-        $this->request = $this->getRequestInstance();
+        $this->instance = $this->getRequestInstance();
     }
 
     public function getRequestInstance(){
         return HttpFoundation::createFromGlobals();
     }
-    
+
     /**
      * Get a request parameter by key
      *
@@ -30,7 +30,7 @@ class Request extends HttpFoundation
     {
         return $this->getRequestInputByType()->has($key) ? $this->getRequestInputByType()->get($key) : $default;
     }
-    
+
     /**
      * Get the request uri
      *
@@ -38,9 +38,9 @@ class Request extends HttpFoundation
      */
     public function uri()
     {
-       return $this->request->getRequestUri();
+        return $this->instance->getRequestUri();
     }
-    
+
     /**
      * Get the request path
      *
@@ -48,9 +48,9 @@ class Request extends HttpFoundation
      */
     public function path()
     {
-        return $this->request->getPathInfo();
+        return $this->instance->getPathInfo();
     }
-    
+
     /**
      * get all request data by request type
      *
@@ -60,7 +60,7 @@ class Request extends HttpFoundation
     {
         return $this->getRequestInputByType()->all();
     }
-    
+
     /**
      * get the request data base on request method
      *
@@ -68,9 +68,10 @@ class Request extends HttpFoundation
      */
     public function getRequestInputByType()
     {
-        return $this->getRealMethod() == 'GET' ? $this->request->query : $this->request->request;
+        return $this->instance->getRealMethod() == 'GET' ? HttpFoundation::createFromGlobals()->query :
+            HttpFoundation::createFromGlobals()->request;
     }
-    
+
     /**
      * The ip address of the client
      *
@@ -78,9 +79,9 @@ class Request extends HttpFoundation
      */
     public function clientIp()
     {
-        return $this->request->getClientIp();
+        return $this->instance->getClientIp();
     }
-    
+
     /**
      * User agent of the client
      *
@@ -88,7 +89,7 @@ class Request extends HttpFoundation
      */
     public function clientUserAgent()
     {
-        return $this->request->headers->get('User-Agent');
+        return $this->instance->headers->get('User-Agent');
     }
-    
+
 }
