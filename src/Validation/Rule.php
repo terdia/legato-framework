@@ -5,17 +5,17 @@ namespace Legato\Framework\Validator;
 
 use Legato\Framework\Connection as DB;
 
-class Rule
+class Rule extends AbstractRule
 {
     /**
-     * @param $column, field name or column
+     * @param $column, field name
      * @param $value, value passed into the form
      * @param $policy, the rule that e set e.g min = 5
      * @return bool, true | false
      */
     public function unique($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
+        if($this->shouldNotBeEmpty($value)){
             return !DB::table($policy)->where($column, '=', $value)->exists();
         }
         return true;
@@ -23,12 +23,12 @@ class Rule
 
     public function required($column, $value, $policy)
     {
-        return $value !== null && !empty(trim($value));
+        return $this->shouldNotBeEmpty($value);
     }
 
     public function min($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
+        if($this->shouldNotBeEmpty($value)){
             return strlen($value) >= $policy;
         }
         return true;
@@ -36,7 +36,7 @@ class Rule
 
     public function max($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
+        if($this->shouldNotBeEmpty($value)){
             return strlen($value) <= $policy;
         }
         return true;
@@ -44,9 +44,8 @@ class Rule
 
     public function email($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
-            $value = filter_var($value, FILTER_SANITIZE_EMAIL);
-            return filter_var($value, FILTER_VALIDATE_EMAIL);
+        if($this->shouldNotBeEmpty($value)){
+            return filter_var(filter_var($value, FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL);
         }
 
         return true;
@@ -54,7 +53,7 @@ class Rule
 
     public function mixed($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
+        if($this->shouldNotBeEmpty($value)){
             if(!preg_match('/^[A-Za-z0-9 .,_~\-!@#\&%\^\'\*\(\)]+$/', $value)){
                 return false;
             }
@@ -64,17 +63,23 @@ class Rule
 
     public function alphaNum($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
-            if(!preg_match('/^[A-Za-z0-9]+$/', $value)){
-                return false;
-            }
+        if($this->shouldNotBeEmpty($value)){
+            return ctype_alnum($value);
+        }
+        return true;
+    }
+
+    public function alpha($column, $value, $policy)
+    {
+        if($this->shouldNotBeEmpty($value)){
+            return ctype_alpha($value);
         }
         return true;
     }
 
     public function string($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
+        if($this->shouldNotBeEmpty($value)){
             if(!preg_match('/^[A-Za-z ]+$/', $value)){
                 return false;
             }
@@ -82,19 +87,17 @@ class Rule
         return true;
     }
 
-    public function number($column, $value, $policy)
+    public function numeric($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
-            if(!preg_match('/^[0-9]+$/', $value)){
-                return false;
-            }
+        if($this->shouldNotBeEmpty($value)){
+            return ctype_digit($value);
         }
         return true;
     }
 
-    public function double($column, $value, $policy)
+    public function float($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
+        if($this->shouldNotBeEmpty($value)){
             if(!filter_var($value, FILTER_VALIDATE_FLOAT)){
                 return false;
             }
@@ -104,11 +107,8 @@ class Rule
 
     public function url($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
-
-            $value = filter_var($value, FILTER_SANITIZE_URL);
-
-            if(!filter_var($value, FILTER_VALIDATE_URL)){
+        if($this->shouldNotBeEmpty($value)){
+            if(!filter_var(filter_var($value, FILTER_SANITIZE_URL), FILTER_VALIDATE_URL)){
                 return false;
             }
         }
@@ -117,9 +117,10 @@ class Rule
 
     public function ip($column, $value, $policy)
     {
-        if($value != null && !empty(trim($value))){
+        if($this->shouldNotBeEmpty($value)){
            return filter_var($value, FILTER_VALIDATE_IP);
         }
         return true;
     }
+
 }

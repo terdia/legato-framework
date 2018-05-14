@@ -15,6 +15,11 @@ class Validator
 
     protected $errors;
 
+    public function __construct(array $data, array $rules, $customValidationErrorMessages = [])
+    {
+        $this->create($data, $rules, $customValidationErrorMessages);
+    }
+
     /**
      * Perform validation for the data provider and set error messages
      *
@@ -108,5 +113,4 @@ class Validator
     {
         return $key ? $this->errors[$key] : $this->errors;
     }
-
 }
