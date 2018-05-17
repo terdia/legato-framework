@@ -16,25 +16,34 @@ class Route
 
     public static function get($target, $handler, $name = null)
     {
-        array_push(static::$routes, ['method' => 'GET', 'target' => $target,
+        array_push(static::$routes, ['method' => 'GET|HEAD', 'target' => $target,
             'handler' => $handler, 'name' => $name]);
     }
 
     public static function put($target, $handler, $name = null)
     {
-        array_push(static::$routes, ['method' => 'PUT', 'target' => $target, 'handler' => $handler]);
+        array_push(static::$routes, ['method' => 'PUT', 'target' => $target,
+            'handler' => $handler, 'name' => $name]);
     }
 
     public static function patch($target, $handler, $name = null)
     {
-        array_push(static::$routes, ['method' => 'PATCH', 'target' => $target, 'handler' => $handler]);
+        array_push(static::$routes, ['method' => 'PATCH', 'target' => $target,
+            'handler' => $handler, 'name' => $name]);
     }
 
     public static function delete($target, $handler, $name = null)
     {
-        array_push(static::$routes, ['method' => 'DELETE', 'target' => $target, 'handler' => $handler]);
+        array_push(static::$routes, ['method' => 'DELETE', 'target' => $target,
+            'handler' => $handler, 'name' => $name]);
     }
 
+    /**
+     * Route Group
+     *
+     * @param $prefix
+     * @param array $targets
+     */
     public static function group($prefix, array $targets)
     {
         foreach ($targets as $target)
@@ -51,6 +60,25 @@ class Route
         }
     }
 
+    /**
+     * Create a Rest Resource
+     *
+     * @param $target
+     * @param $handler
+     */
+    public static function resource($target, $handler)
+    {
+        $route = $target;
+        $sanitized = str_replace('/', '', $target);
+
+        static::get($route, $handler."@index", $sanitized."_index");
+        static::post($target, $handler."@save", $sanitized."_save");
+        static::get($target."/[i:id]", $handler."@showCreateForm", $sanitized."_create_form");
+        static::post($target."/[i:id]", $handler."@update", $sanitized."_update");
+        static::get($target."/[i:id]/edit", $handler."@showEditForm", $sanitized."_edit_form");
+        static::get($target."/[i:id]", $handler."@update", $sanitized."_delete");
+    }
+
     public static function all()
     {
         $router = new AltoRouter;
@@ -61,5 +89,15 @@ class Route
         }
 
         return $router;
+    }
+
+    /**
+     * Get details of all route, will be used by console command
+     *
+     * @return array
+     */
+    public static function list()
+    {
+        return static::$routes;
     }
 }
