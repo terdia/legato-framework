@@ -3,6 +3,7 @@
 namespace Legato\Framework;
 
 use Symfony\Component\HttpFoundation\Request as HttpFoundation;
+use Legato\Framework\Session\Session;
 
 class Request extends HttpFoundation
 {
@@ -92,4 +93,46 @@ class Request extends HttpFoundation
         return $this->instance->headers->get('User-Agent');
     }
 
+    /**
+     * Get specific header
+     *
+     * @param $key
+     * @param bool $default
+     * @return bool|string|string[]
+     */
+    public function getHeader($key, $default = false)
+    {
+        return $this->headers->has($key) ? $this->headers->get($key) : $default;
+    }
+
+    /**
+     * Set header
+     *
+     * @param $key
+     * @param $value
+     */
+    public function setHeader($key, $value)
+    {
+        return $this->headers->set($key, $value);
+    }
+
+    /**
+     * Get session through request
+     *
+     * @return null|\Symfony\Component\HttpFoundation\Session\SessionInterface
+     */
+    public function session()
+    {
+        return Session::getInstance();
+    }
+
+    /**
+     * Get the real request method
+     *
+     * @return string
+     */
+    public function method()
+    {
+        return $this->instance->getRealMethod();
+    }
 }

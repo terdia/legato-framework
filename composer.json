@@ -26,7 +26,6 @@
     },
     "require": {
         "php": ">=7.0.0",
-        "symfony/http-foundation": "^3.4",
         "illuminate/container": "^5.5",
         "vlucas/phpdotenv": "^2.4",
         "twig/twig": "^2.4",
@@ -36,10 +35,11 @@
         "symfony/var-dumper": "^3.4",
         "symfony/thanks": "^1.0",
         "symfony/console": "^4.0",
-        "symfony/filesystem": "^4.0",
         "illuminate/database": "^5.6",
         "swiftmailer/swiftmailer": "^6.0",
-        "altorouter/altorouter": "^1.2"
+        "altorouter/altorouter": "^1.2",
+        "symfony/filesystem": "^4.0",
+        "symfony/http-foundation": "^4.0"
     },
     "config":{
         "optimize-autoloader":true

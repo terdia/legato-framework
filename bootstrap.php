@@ -1,5 +1,4 @@
 <?php
-use Symfony\Component\HttpFoundation\Session\Session;
 use Whoops\Run;
 use Legato\Framework\Request;
 use Illuminate\Container\Container;
@@ -39,13 +38,7 @@ if (getenv('APP_ENV') !== 'production') {
 }
 $whoops->register();
 
-$session = new Session;
-if(!$session->isStarted()){
-    $session->start();
-};
-
 $dispatcher = Route::all();
-
-new RouteDispatcher($request, $container, $session, $dispatcher);
+new RouteDispatcher($request, $container, $dispatcher);
 
 

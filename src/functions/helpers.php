@@ -1,5 +1,5 @@
 <?php
-use Symfony\Component\HttpFoundation\Session\Session;
+use Legato\Framework\Session\Session;
 
 if (! function_exists('view')) {
     function view($view, $data = []):void
@@ -28,6 +28,9 @@ if (! function_exists('redirectTo')) {
     }
 }
 
+/**
+ * @deprecated
+ */
 if (! function_exists('flash')) {
     function flash(Session $session, $name):string
     {
@@ -53,11 +56,11 @@ if (! function_exists('filesystem')){
     }
 }
 
-/**
- * Send email from a file
- */
 if (! function_exists('makeMail') )
 {
+    /**
+     * Send email from a file
+     */
     function makeMail($path, $data)
     {
         extract($data);
@@ -73,5 +76,48 @@ if (! function_exists('makeMail') )
         $content = ob_get_contents();
         ob_end_clean();
         return $content;
+    }
+}
+
+if(! function_exists('session')) {
+    /**
+     * session instance
+     */
+    function session()
+    {
+        $session = Session::getInstance();
+        if(!$session->isStarted()){
+            $session->start();
+        };
+        return $session;
+    }
+}
+
+if (! function_exists('csrf_token_field')) {
+    /**
+     * Generate a CSRF token hidden input field.
+     */
+    function csrf_token_field()
+    {
+        echo html_entity_decode('<input type="hidden" name="token" value="'.token().'">');
+    }
+}
+
+if (! function_exists('token') ) {
+    /**
+     * Generate a CSRF token
+     */
+    function token()
+    {
+        $session = session();
+
+        if($session->has('token')){
+            return $session->get('token');
+        }
+
+        $token = base64_encode( openssl_random_pseudo_bytes(32));
+        $session->set('token', $token);
+
+        return $token;
     }
 }
