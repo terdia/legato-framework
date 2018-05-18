@@ -72,11 +72,12 @@ class Route
         $sanitized = str_replace('/', '', $target);
 
         static::get($route, $handler."@index", $sanitized."_index");
+        static::get($target."/create", $handler."@showCreateForm", $sanitized."_create_form");
         static::post($target, $handler."@save", $sanitized."_save");
-        static::get($target."/[i:id]", $handler."@showCreateForm", $sanitized."_create_form");
-        static::post($target."/[i:id]", $handler."@update", $sanitized."_update");
+        static::get($target."/[i:id]", $handler."@show", $sanitized."_display");
         static::get($target."/[i:id]/edit", $handler."@showEditForm", $sanitized."_edit_form");
-        static::get($target."/[i:id]", $handler."@update", $sanitized."_delete");
+        static::post($target."/[i:id]", $handler."@update", $sanitized."_update");
+        static::get($target."/[i:id]/delete", $handler."@delete", $sanitized."_delete");
     }
 
     public static function all()
