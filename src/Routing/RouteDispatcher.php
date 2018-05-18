@@ -4,7 +4,7 @@ namespace Legato\Framework\Routing;
 
 use Legato\Framework\Request;
 use Illuminate\Container\Container;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Legato\Framework\Security\CSRFProtection;
 use AltoRouter;
 
 class RouteDispatcher
@@ -14,10 +14,9 @@ class RouteDispatcher
     protected $container;
     protected $dispatcher;
 
-    public function __construct(Request $request, Container $container,
-                                Session $session, AltoRouter $router)
+    public function __construct(Request $request, Container $container, AltoRouter $router)
     {
-
+        $this->container = $container;
         /**
          * if the user is accessing the app via localhost/project/public
          * we set the parse the request uri so that it matches a defined route
@@ -27,16 +26,15 @@ class RouteDispatcher
         $this->dispatcher = $router->match();
 
         if($this->dispatcher){
-            $this->container = $container;
             $this->container->isShared(Request::class);
-            $this->container->bind(Session::class);
+
+            $this->validateCSRFToken();
 
             $this->handle($this->dispatcher['target'], $this->dispatcher['params']);
         }else{
             header($_SERVER['SERVER_PROTOCOL'].'404 Not Found');
             view('errors/404');
         }
-
     }
 
     /**
@@ -80,6 +78,7 @@ class RouteDispatcher
 
         return false;
     }
+
     /**
      * Get the request uri
      *
@@ -90,5 +89,19 @@ class RouteDispatcher
         if($this->prepareUriForLocalhostAccess($uri)){
             $_SERVER['REQUEST_URI'] = $this->prepareUriForLocalhostAccess($uri);
         }
+    }
+
+    private function validateCSRFToken()
+    {
+        if(getenv('FRAMEWORK') == 'developer'){
+            /**
+             * Framework development mood
+             */
+            $CSRFProtection =  $this->container->make(CSRFProtection::class);
+        }else{
+            $CSRFProtection =  $this->container->make(\App\Middleware\CSRFVerification::class);
+        }
+
+        $this->container->call(array($CSRFProtection, 'validate'));
     }
 }
