@@ -121,3 +121,14 @@ if (! function_exists('token') ) {
         return $token;
     }
 }
+
+if (! function_exists('isRunningFromConsole') ) {
+    /**
+     * Determine if application is running from commandline
+     *
+     * @return bool
+     */
+    function isRunningFromConsole() {
+        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+    }
+}

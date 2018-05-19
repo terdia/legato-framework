@@ -74,15 +74,15 @@ class CSRFProtection
     }
 
     /**
-     * Methods for viewing resource don't require CSRF Validation
-     * such methods are considered safe
+     * Methods for viewing resources 'HEAD', 'GET', 'OPTIONS' and Unit
+     * test does not require CSRF Validation such methods are considered safe
      *
      * @return bool
      */
     public function isSafeRequest()
     {
-        return in_array($this->request->method(), ['HEAD', 'GET', 'OPTIONS']) ||
-            (php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg');
+        return in_array($this->request->method(), ['HEAD', 'GET', 'OPTIONS'])
+            || $this->isTestMode();
     }
 
     /**
@@ -97,6 +97,19 @@ class CSRFProtection
         }
 
         return 'nothing';
+    }
+
+    /**
+     * Determine if application is running from test mode
+     *
+     * @return bool
+     */
+    public function isTestMode()
+    {
+        if(isRunningFromConsole() && (defined('PHPUNIT_RUNNING') && PHPUNIT_RUNNING == true)){
+            return true;
+        }
+        return false;
     }
 
 }

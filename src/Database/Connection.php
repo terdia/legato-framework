@@ -20,9 +20,9 @@ class Connection extends Capsule
         $this->addConnection([
             'driver' => config('DB_DRIVER', 'mysql'),
             'host' => config('HOST', 'localhost'),
-            'database' => config('DB_NAME', 'store'),
-            'username' => config('DB_USERNAME', 'store'),
-            'password' => config('DB_PASSWORD', 'secret'),
+            'database' => config('DB_NAME', ''),
+            'username' => config('DB_USERNAME', ''),
+            'password' => config('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => ''
