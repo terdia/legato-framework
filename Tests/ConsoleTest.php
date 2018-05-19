@@ -1,6 +1,7 @@
 <?php
 namespace Framework\Tests;
 
+use Legato\Framework\Security\CSRFProtection;
 use Legato\Framework\WelcomeCommand;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
@@ -22,6 +23,23 @@ class ConsoleTest extends TestCase
         $symphonyCommandTester->execute([]);
         
         $this->assertSame('Welcome to the Legato Framework', $symphonyCommandTester->getDisplay());
+    }
+
+    /**
+     * @test
+     */
+    public function can_exempt_unit_test_from_csrf_verification()
+    {
+        $test = false;
+        $console = isRunningFromConsole();
+
+        $this->assertSame(true, $console);
+
+        if(defined('PHPUNIT_RUNNING')){
+            $test = PHPUNIT_RUNNING;
+        }
+
+        $this->assertSame(true, $test);
     }
 
 }
