@@ -29,7 +29,8 @@ class Request extends HttpFoundation
      */
     public function input($key, $default = false)
     {
-        return $this->getRequestInputByType()->has($key) ? $this->getRequestInputByType()->get($key) : $default;
+        return $this->getRequestInputByType()->has($key) ?
+            $this->getRequestInputByType()->get($key) : $default;
     }
 
     /**
@@ -134,5 +135,35 @@ class Request extends HttpFoundation
     public function method()
     {
         return $this->instance->getRealMethod();
+    }
+
+    /**
+     * Get all the data from PHP $_FILES super global
+     *
+     * @return \Symfony\Component\HttpFoundation\ServerBag
+     */
+    public function file()
+    {
+        return $this->instance->files;
+    }
+
+    /**
+     * Get all the data from PHP $_COOKIES super global
+     *
+     * @return \Symfony\Component\HttpFoundation\ServerBag
+     */
+    public function cookies()
+    {
+        return $this->instance->cookies;
+    }
+
+    /**
+     * Get all the data from PHP $_SERVER super global
+     *
+     * @return \Symfony\Component\HttpFoundation\ServerBag
+     */
+    public function server()
+    {
+        return $this->instance->server;
     }
 }
