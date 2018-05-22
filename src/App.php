@@ -60,7 +60,7 @@ class App
          * Framework development mood
          */
         $CSRFProtection =  $this->container->make(CSRFProtection::class);
-        return $this->container->call(array($CSRFProtection, 'validate'));
+        return $this->container->call(array($CSRFProtection, 'handle'));
     }
 
     /**

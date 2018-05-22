@@ -23,12 +23,23 @@ class CSRFProtection
     }
 
     /**
+     * Run CSRF Validation verification
+     *
+     * @return bool
+     * @throws TokenMisMatchException
+     */
+    public function handle()
+    {
+        return $this->validate();
+    }
+
+    /**
      * Validate POST | PUT | PATCH request token
      *
      * @return bool
      * @throws TokenMisMatchException
      */
-    public function validate()
+    protected function validate()
     {
 
         if($this->isSafeRequest() || $this->isAllowedByDeveloper() || $this->verify())
@@ -42,7 +53,7 @@ class CSRFProtection
     /**
      * Verify CSRF Token
      */
-    public function verify()
+    protected function verify()
     {
         $token = $this->extractToken();
 
@@ -54,7 +65,7 @@ class CSRFProtection
      *
      * @return bool|string|string[]
      */
-    public function extractToken()
+    protected function extractToken()
     {
         if($this->request->input('token') === false) {
             if( !$this->request->getHeader('X-JS-CLIENTS-TOKEN') ){
@@ -68,7 +79,7 @@ class CSRFProtection
     /**
      * Check if URI does not require CSRF Validation
      */
-    public function isAllowedByDeveloper()
+    protected function isAllowedByDeveloper()
     {
         return in_array($this->request->uri(), $this->skipValidation);
     }
@@ -79,7 +90,7 @@ class CSRFProtection
      *
      * @return bool
      */
-    public function isSafeRequest()
+    protected function isSafeRequest()
     {
         return in_array($this->request->method(), ['HEAD', 'GET', 'OPTIONS'])
             || $this->isTestMode();
@@ -90,7 +101,7 @@ class CSRFProtection
      *
      * @return mixed|string
      */
-    public function tokenFromStorage()
+    protected function tokenFromStorage()
     {
         if($this->request->session()->has('token')){
             return $this->request->session()->get('token');
@@ -104,7 +115,7 @@ class CSRFProtection
      *
      * @return bool
      */
-    public function isTestMode()
+    protected function isTestMode()
     {
         if(isRunningFromConsole() && (defined('PHPUNIT_RUNNING') && PHPUNIT_RUNNING == true)){
             return true;

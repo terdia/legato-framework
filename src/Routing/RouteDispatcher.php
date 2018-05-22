@@ -5,22 +5,17 @@ namespace Legato\Framework\Routing;
 use Legato\Framework\App;
 use Legato\Framework\Request;
 use Illuminate\Container\Container;
-use Legato\Framework\Security\CSRFProtection;
 use AltoRouter;
 
 class RouteDispatcher
 {
-    protected $controller;
-    protected $methods;
-    protected $container;
     protected $dispatcher;
     protected $app;
 
     public function __construct(Request $request, Container $container, AltoRouter $router)
     {
-        $this->container = $container;
-
         $this->app = new App($container);
+
         /**
          * if the user is accessing the app via localhost/project/public
          * we set the parse the request uri so that it matches a defined route
@@ -30,9 +25,7 @@ class RouteDispatcher
         $this->dispatcher = $router->match();
 
         if($this->dispatcher){
-
             $this->app->boot();
-
             $this->handle($this->dispatcher['target'], $this->dispatcher['params']);
         }else{
             header($_SERVER['SERVER_PROTOCOL'].'404 Not Found');
