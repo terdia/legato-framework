@@ -7,9 +7,9 @@ class Legato
 {
     protected $console;
     
-    public function __construct($name = 'Legato', $version = 'v1')
+    public function __construct()
     {
-        $this->console = new Application($name, $version);
+        $this->console = new Application(App::NAME, App::VERSION);
     }
     
     /**
