@@ -71,14 +71,38 @@ class App
     protected function resolveDependencies(array $dependencies)
     {
        foreach ($dependencies as $dependency => $type){
-           if(is_null($type) || $type == 'bind'){
-               $this->container->bind($dependency);
-           }else if($type == 'shared'){
-               $this->container->isShared($dependency);
-           }elseif($type == 'singleton'){
-               $this->container->singleton($dependency);
-           }
+           call_user_func_array([$this, $type], [$dependency]);
        }
+    }
+
+    /**
+     * Register a binding with the container.
+     *
+     * @param $target
+     */
+    protected function bind($target)
+    {
+        $this->container->bind($target);
+    }
+
+    /**
+     * Set a given type to shared.
+     *
+     * @param $target
+     */
+    protected function shared($target)
+    {
+        $this->container->isShared($target);
+    }
+
+    /**
+     * Register a shared binding in the container.
+     *
+     * @param $target
+     */
+    protected function singleton($target)
+    {
+        $this->container->singleton($target);
     }
 
     /**
