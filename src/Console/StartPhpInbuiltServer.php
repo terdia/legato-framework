@@ -49,7 +49,6 @@ class StartPhpInbuiltServer extends Command
        /**
         * check for user supplied hostname option
         */
-
        if($input->hasOption('hostname') && $input->getOption('hostname') != NULL)
        {
            $this->hostname = $input->getOption('hostname');

@@ -1,0 +1,70 @@
+<?php
+namespace App\Controllers;
+
+class PlaceHolder extends BaseController
+{
+
+    /**
+     * display all resources
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Display the form to create a resource
+     */
+    public function showCreateForm()
+    {
+        //
+    }
+
+    /**
+     * Save the resource
+     */
+    public function save()
+    {
+        //
+    }
+
+    /**
+     * Display a specific resource
+     *
+     * @param $id
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form to edit the resource
+     *
+     * @param $id
+     */
+    public function showEditForm($id)
+    {
+
+    }
+
+    /**
+     * Update the specified resource
+     *
+     * @param $id
+     */
+    public function update($id)
+    {
+
+    }
+
+    /**
+     * Delete the specified resource
+     *
+     * @param $id
+     */
+    public function delete($id)
+    {
+
+    }
+}

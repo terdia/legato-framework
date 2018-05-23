@@ -23,11 +23,15 @@ class CreateController extends AbstractFileGenerator
     protected $basePath;
     
     protected $type = 'controller';
+
+    protected $restful = false;
+
     
     public function __construct()
     {
         parent::__construct();
         $this->setArguments($this->argumentName, true, 'The controller name or path');
+        $this->setOption('restful', null, false, 'create a restful controller');
     }
     
 }

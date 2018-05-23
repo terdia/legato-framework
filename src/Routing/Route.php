@@ -7,8 +7,8 @@ use Closure;
 
 class Route
 {
-    public static $routes = [];
-    static $prefixRoutes = [];
+    protected static $routes = [];
+    protected static $prefixRoutes = [];
 
     public static function post($target, $handler, $name = null)
     {
@@ -99,6 +99,12 @@ class Route
         static::get($target."/[i:id]/delete", $handler."@delete", $sanitized."_delete");
     }
 
+    /**
+     * Register routes
+     *
+     * @return AltoRouter
+     * @throws \Exception
+     */
     public static function all()
     {
         $router = new AltoRouter;
@@ -112,7 +118,7 @@ class Route
     }
 
     /**
-     * Get details of all route, will be used by console command
+     * Get details of all route, will be used by console command later
      *
      * @return array
      */

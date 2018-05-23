@@ -16,7 +16,7 @@ class App
     /**
      * Application name
      */
-    const NAME = 'Legato';
+    const NAME = 'Legato Framework';
 
     /**
      * IOC container
