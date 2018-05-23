@@ -11,7 +11,7 @@ class App
     /**
      * Application version number
      */
-    const VERSION = 1.1;
+    const VERSION = '1.1.6';
 
     /**
      * Application name
