@@ -41,7 +41,7 @@ class Twig extends View
      *
      * @return array
      */
-    private function getExtensions()
+    protected function getExtensions()
     {
         if(file_exists(realpath(__DIR__ . '/../../../../../config/twig.php'))){
             $this->config = require realpath(__DIR__ . '/../../../../../config/twig.php');
@@ -56,18 +56,27 @@ class Twig extends View
      *
      * @param \Twig_Environment $twig
      */
-    public function registerExtension(\Twig_Environment $twig)
+    private function registerExtension(\Twig_Environment $twig)
     {
         $extensions = $this->getExtensions();
         if( count($extensions) ) {
             foreach ( $extensions as $key => $extension ){
-
-                if($key == 'debug' && 'false' === config('APP_DEBUG')) {
-                    continue;
-                }
-
-                $twig->addExtension(new $extension);
+                $this->load($twig, $key, $extension);
             }
+        }
+    }
+
+    /**
+     * @param \Twig_Environment $twig
+     * @param $key
+     * @param $extension
+     */
+    private function load(\Twig_Environment $twig, $key, $extension)
+    {
+        if($key == 'debug' && 'false' === config('APP_DEBUG')) {
+            //
+        }else{
+            $twig->addExtension(new $extension);
         }
     }
 }

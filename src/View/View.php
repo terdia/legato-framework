@@ -13,8 +13,7 @@ abstract class View
         $this->basePath = $this->viewPath();
         $this->cache = $this->cachePath();
     }
-    
-    
+
     public function viewPath()
     {
         if(file_exists(realpath(__DIR__.'/../../../../../resources/views'))){
