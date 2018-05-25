@@ -34,10 +34,10 @@ class TwigGlobal extends AbstractTwigGlobal
     public function getUserDefinedGlobals()
     {
         if(file_exists(realpath(__DIR__.'/../../../../config/twig.php'))){
-            $this->config = require_once realpath(__DIR__.'/../../../../config/twig.php');
+            $this->config = require realpath(__DIR__.'/../../../../config/twig.php');
         }elseif (file_exists(realpath(__DIR__ . '/../config/twig.php'))){
-            $this->config = require_once realpath(__DIR__ . '/../config/twig.php');
+            $this->config = require realpath(__DIR__ . '/../config/twig.php');
         }
-        return $this->config['twig_global'];
+        return isset($this->config['twig_global']) ? $this->config['twig_global'] : [];
     }
 }
