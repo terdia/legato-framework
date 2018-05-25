@@ -18,9 +18,16 @@ class AbstractFileGenerator extends Command implements TemplateGenerator
      * @var string
      */
     protected $type;
-    
+
+    /**
+     * Base path for file placement
+     *
+     * @var bool|string
+     */
     protected $basePath;
-    
+
+    protected $restful;
+
     /**
      * Argument identifier (name)
      * @var string
@@ -109,6 +116,12 @@ class AbstractFileGenerator extends Command implements TemplateGenerator
     {
         $argument = $input->getArgument($this->argumentName);
         $path = $this->basePath . '/' . $argument . '.php';
+
+        if($input->hasOption('restful'))
+        {
+            $this->restful = true;
+        }
+
         $response = $this->runFileGeneratorCommand($path, $argument);
         
         if($response === true){

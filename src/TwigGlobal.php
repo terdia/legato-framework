@@ -17,7 +17,7 @@ class TwigGlobal extends AbstractTwigGlobal
      * get the default globals available for twig template
      * @return array
      */
-    public function getDefaults()
+    private function getDefaults()
     {
         return [
             'flash' => $this->getFlashMessage('flash'),
@@ -31,13 +31,13 @@ class TwigGlobal extends AbstractTwigGlobal
      * Get the user defined global for twig templates
      * @return mixed
      */
-    public function getUserDefinedGlobals()
+    protected function getUserDefinedGlobals()
     {
         if(file_exists(realpath(__DIR__.'/../../../../config/twig.php'))){
-            $this->config = require_once realpath(__DIR__.'/../../../../config/twig.php');
+            $this->config = require realpath(__DIR__.'/../../../../config/twig.php');
         }elseif (file_exists(realpath(__DIR__ . '/../config/twig.php'))){
-            $this->config = require_once realpath(__DIR__ . '/../config/twig.php');
+            $this->config = require realpath(__DIR__ . '/../config/twig.php');
         }
-        return $this->config['twig_global'];
+        return isset($this->config['twig_global']) ? $this->config['twig_global'] : [];
     }
 }

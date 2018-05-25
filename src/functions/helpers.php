@@ -2,7 +2,16 @@
 use Legato\Framework\Session\Session;
 
 if (! function_exists('view')) {
-    function view($view, $data = []):void
+    /**
+     * Render view
+     * @param $view
+     * @param array $data
+     * @param array $options
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
+     */
+    function view($view, $data = [], $options = []):void
     {
         getenv('FRAMEWORK') == 'developer'?$path_to_views = realpath(__DIR__ . '/../../resources/views'):
             $path_to_views = realpath(__DIR__.'/../../../../../resources/views');
@@ -15,7 +24,7 @@ if (! function_exists('view')) {
                 break;
                 
             default:
-                new \Legato\Framework\Twig($view, $data);
+                new \Legato\Framework\Twig($view, $data, $options);
         }
     }
 }
@@ -43,6 +52,13 @@ if (! function_exists('flash')) {
 }
 
 if (! function_exists('config')) {
+    /**
+     * Get value from environment variable or default
+     *
+     * @param $key
+     * @param null $default
+     * @return array|false|null|string
+     */
     function config($key, $default = null)
     {
         return getenv($key) ? getenv($key) : $default;
@@ -50,6 +66,11 @@ if (! function_exists('config')) {
 }
 
 if (! function_exists('filesystem')){
+    /**
+     * Get instance of symfony filesystem
+     *
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
     function filesystem()
     {
         return (new \Legato\Framework\File())->getFileSystem();
@@ -60,6 +81,10 @@ if (! function_exists('makeMail') )
 {
     /**
      * Send email from a file
+     *
+     * @param $path
+     * @param $data
+     * @return string
      */
     function makeMail($path, $data)
     {

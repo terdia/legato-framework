@@ -3,10 +3,12 @@
 
 namespace Legato\Framework\Routing;
 use AltoRouter;
+use Closure;
 
 class Route
 {
-    public static $routes = [];
+    protected static $routes = [];
+    protected static $prefixRoutes = [];
 
     public static function post($target, $handler, $name = null)
     {
@@ -39,24 +41,41 @@ class Route
     }
 
     /**
+     * Support method to add group of routes
+     *
+     * @param $method, HTTP Request method
+     * @param $target, the route
+     * @param $handler, Closure | Controller@method
+     * @param $name, route name optional
+     */
+    public static function add($method, $target, $handler, $name = null)
+    {
+        array_push(static::$prefixRoutes, [
+            'method' => $method, 'target' => $target,
+            'handler' => $handler, 'name' => $name
+        ]);
+    }
+
+    /**
      * Route Group
      *
      * @param $prefix
-     * @param array $targets
+     * @param \Closure $callback
      */
-    public static function group($prefix, array $targets)
+    public static function group($prefix, Closure $callback)
     {
-        foreach ($targets as $target)
-        {
-            if(count($target) < 3) {
-                throw new \ArgumentCountError('Missing data for route group');
-            }
+        $callback->call(new static);
+        foreach (static::$prefixRoutes as $key => $prefixRoute){
+            $target = $prefix.$prefixRoute['target'];
+            $handler = $prefixRoute['handler'];
+            $name = $prefixRoute['name'];
 
-            isset($target[3]) ? $name = $target[3]: $name = null;
-            array_push(static::$routes, [
-                'method' => $target[0], 'target' => "{$prefix}{$target[1]}",
-                'handler' => $target[2], 'name' => $name
-            ]);
+            unset(static::$prefixRoutes[$key]);
+
+            call_user_func_array(
+                [new static, strtolower($prefixRoute['method'])],
+                [$target, $handler, $name]
+            );
         }
     }
 
@@ -80,6 +99,12 @@ class Route
         static::get($target."/[i:id]/delete", $handler."@delete", $sanitized."_delete");
     }
 
+    /**
+     * Register routes
+     *
+     * @return AltoRouter
+     * @throws \Exception
+     */
     public static function all()
     {
         $router = new AltoRouter;
@@ -93,7 +118,7 @@ class Route
     }
 
     /**
-     * Get details of all route, will be used by console command
+     * Get details of all route, will be used by console command later
      *
      * @return array
      */

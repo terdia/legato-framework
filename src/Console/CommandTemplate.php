@@ -14,6 +14,11 @@ trait CommandTemplate
      */
     public function controller()
     {
+        if($this->restful){
+            return filesystem()->exists(realpath(__DIR__ . '/../../../../../app/controllers')) ?
+                realpath(__DIR__ . '/../Templates/controller/restful.stub') :
+                realpath(__DIR__ . '/../Templates/controller/restful.core.stub');
+        }
         return filesystem()->exists(realpath(__DIR__ . '/../../../../../app/controllers')) ?
             realpath(__DIR__ . '/../Templates/controller/plain.stub') :
             realpath(__DIR__ . '/../Templates/controller/core.stub');
