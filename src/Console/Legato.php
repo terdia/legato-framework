@@ -24,9 +24,11 @@ class Legato
             $this->console->add(new $command);
         }
     }
-    
+
     /**
      * Start the console application
+     *
+     * @throws \Exception
      */
     public function start()
     {
