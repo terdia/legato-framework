@@ -76,6 +76,11 @@ class StartPhpInbuiltServer extends Command
        passthru($this->startPHP());
    }
 
+    /**
+     * Start a local dev PHP Server
+     *
+     * @return string
+     */
    public function startPHP()
    {
        return sprintf('%s -S %s:%s', $this->phpexec, $this->hostname, $this->port);

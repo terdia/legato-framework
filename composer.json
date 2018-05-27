@@ -39,7 +39,8 @@
         "swiftmailer/swiftmailer": "^6.0",
         "altorouter/altorouter": "^1.2",
         "symfony/filesystem": "^4.0",
-        "symfony/http-foundation": "^4.0"
+        "symfony/http-foundation": "^4.0",
+        "symfony/stopwatch": "^4.0"
     },
     "config":{
         "optimize-autoloader":true

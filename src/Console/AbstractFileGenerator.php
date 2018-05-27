@@ -111,15 +111,23 @@ class AbstractFileGenerator extends Command implements TemplateGenerator
         $this->filesystem->dumpFile($location, $template);
         return true;
     }
-    
+
+    /**
+     * Execute the command
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $argument = $input->getArgument($this->argumentName);
         $path = $this->basePath . '/' . $argument . '.php';
 
-        if($input->hasOption('restful'))
-        {
+        if ($input->hasOption('restful') && $input->getOption('restful') == true) {
             $this->restful = true;
+        }else{
+            $this->restful = false;
         }
 
         $response = $this->runFileGeneratorCommand($path, $argument);
