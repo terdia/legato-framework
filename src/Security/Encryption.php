@@ -18,7 +18,7 @@ class Encryption
     const SUPPORTED_CIPHER_16 = 'AES-128-CBC';
     const SUPPORTED_CIPHER_32 = 'AES-256-CBC';
     const SUPPORTED_CIPHER_32_LENGTH = 32;
-    const SUPPORTED_CIPHER_16_LENGTH = 32;
+    const SUPPORTED_CIPHER_16_LENGTH = 16;
 
     /**
      * Encryption constructor
@@ -74,10 +74,11 @@ class Encryption
     {
         $key = null;
         if($cipher === static::SUPPORTED_CIPHER_32) {
-            $key = random_bytes(static::SUPPORTED_CIPHER_32_LENGTH);
-        }
 
-        if($cipher === static::SUPPORTED_CIPHER_16) {
+            $key = random_bytes(static::SUPPORTED_CIPHER_32_LENGTH);
+
+        }else if($cipher === static::SUPPORTED_CIPHER_16) {
+
             $key = random_bytes(static::SUPPORTED_CIPHER_16_LENGTH);
         }
 
