@@ -126,11 +126,8 @@ class App
      */
     protected function getUserDefinedDependencies()
     {
-        if(file_exists(realpath(__DIR__.'/../../../../config/app.php'))){
-            $config = require_once realpath(__DIR__.'/../../../../config/app.php');
-            return $config['dependencies'];
-        }
-        return [];
+        $dependencies = getConfigPath('app', 'dependencies');
+        return is_null($dependencies) ? [] : $dependencies;
     }
 
     /**

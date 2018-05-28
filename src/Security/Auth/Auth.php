@@ -1,10 +1,7 @@
 <?php
 
-
 namespace Legato\Framework\Security;
 
-
-use App\Models\User;
 
 class Auth
 {
@@ -16,8 +13,20 @@ class Auth
      */
     public static function user()
     {
-        $username = session()->get('username');
-        return User::where('username', $username)->orWhere('email', $username)->first();
+        $log_me_in = session()->get('log_me_in');
+        $authConfig = getConfigPath('app', 'auth');
+
+       return Gate::user($authConfig, $log_me_in);
+    }
+
+    /**
+     * Check if the current user is authenticated
+     *
+     * @return bool
+     */
+    public static function check()
+    {
+        return static::user() ? true : false;
     }
 
 }

@@ -201,3 +201,23 @@ if (! function_exists('user'))
         return \Legato\Framework\Security\Auth::user();
     }
 }
+
+if (! function_exists('getConfigPath') ){
+
+    /**
+     * get the desired config path
+     *
+     * @param $path
+     * @return mixed
+     */
+    function getConfigPath($path, $key = null)
+    {
+        $path = require realpath(__DIR__ . '/../../../../../config/'.$path.'.php');
+
+        if($key == null) {
+            return $path;
+        }
+
+        return isset($path[$key]) ? $path[$key] : null;
+    }
+}

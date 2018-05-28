@@ -4,8 +4,8 @@
 namespace Legato\Framework\Security;
 
 
-use App\Models\User;
-use ArgumentCountError;
+use InvalidArgumentException;
+
 
 class Gate
 {
@@ -17,22 +17,26 @@ class Gate
     /**
      * @param array $credentials, ['username' => 'value', 'password' => 'value']
      * @param bool $remember
-     * @param array $verification, ['column_name' => 'activation_value'] e.g. [ 'activated' => 1 ]
      * @return bool|string
      */
-    public static function authenticate(array $credentials, $remember = false, $verification = [])
+    public static function authenticate(array $credentials, $remember = false)
     {
         $username = $credentials['username'];
         $password = $credentials['password'];
 
-        $user = static::user($username);
+        $authConfig = getConfigPath('app', 'auth');
+
+        $user = static::user($authConfig, $username);
 
         /**
-         * if authentication requires email verification, we check the database using data provided
+         * if authentication requires email account activation, we check the database using data provided
          * by the developer data = ['column_name' => 'activation_value'] e.g. [ 'activated' => 1 ]
          */
-        if ( $user && count($verification) && !static::activationRequired($verification, $user)) {
+        if ( $user && count($authConfig['activation']) &&
+            !static::activationRequired($authConfig['activation'], $user)) {
+
             return static::NOT_ACTIVATED;
+
         }
 
         /**
@@ -45,7 +49,7 @@ class Gate
         /**
          * Log in user
          */
-        static::login($user);
+        static::loginSession($authConfig, $user);
 
         return static::VALID;
     }
@@ -54,10 +58,10 @@ class Gate
      * Check if user account is activated
      *
      * @param array $data
-     * @param User $user
+     * @param $user
      * @return bool
      */
-    public static function activationRequired( array $data, User $user )
+    public static function activationRequired( array $data, $user )
     {
         $input = array_keys($data);
 
@@ -74,26 +78,37 @@ class Gate
     /**
      * Get the user trying to authenticate
      *
+     * @param array $authConfig
      * @param $username
      * @return mixed
      */
-    public static function user($username)
+    public static function user(array $authConfig, $username)
     {
-        return User::where('username', $username)->orWhere('email', $username)->first();
+        $model = $authConfig['model'];
+        $fields = $authConfig['fields'];
+
+        if(is_array($fields) && count($fields) == 2){
+            return $model::where($fields[0], $username)->orWhere($fields[1], $username)->first();
+        }
+
+        return $model::where($fields[0], $username)->first();
     }
 
-    public static function remember(User $user)
+    public static function remember($user)
     {
 
     }
 
     /**
-     * Log the user in
+     * Set login session
      *
-     * @param User $user
+     * @param array $authConfig
+     * @param $user
      */
-    public static function login(User $user)
+    public static function loginSession(array $authConfig, $user)
     {
-        session()->set('username', $user->username);
+        $fields = $authConfig['fields'];
+        $key = $fields[0];
+        session()->set('log_me_in', $user->$key);
     }
 }
