@@ -157,3 +157,47 @@ if (! function_exists('isRunningFromConsole') ) {
         return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
     }
 }
+
+if(! function_exists('secret') ) {
+    /**
+     * Hash a given string
+     *
+     * @param $plainText
+     * @return bool|string
+     */
+    function secret($plainText)
+    {
+        return password_hash(
+            base64_encode(hash('sha384', $plainText, true)), PASSWORD_DEFAULT
+        );
+    }
+}
+
+if(! function_exists('verify_secret') ) {
+    /**
+     * Verify that a given string matches stored hash
+     *
+     * @param $plainText
+     * @param $hash
+     * @return bool
+     */
+    function verify_secret($plainText, $hash)
+    {
+        return password_verify(
+            base64_encode(hash('sha384', $plainText, true)), $hash
+        );
+    }
+}
+
+if (! function_exists('user'))
+{
+    /**
+     * Get the authenticated user
+     *
+     * @return mixed
+     */
+    function user()
+    {
+        return \Legato\Framework\Security\Auth::user();
+    }
+}
