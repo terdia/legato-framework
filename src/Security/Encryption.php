@@ -18,7 +18,7 @@ class Encryption
     const SUPPORTED_CIPHER_16 = 'AES-128-CBC';
     const SUPPORTED_CIPHER_32 = 'AES-256-CBC';
     const SUPPORTED_CIPHER_32_LENGTH = 32;
-    const SUPPORTED_CIPHER_16_LENGTH = 32;
+    const SUPPORTED_CIPHER_16_LENGTH = 16;
 
     /**
      * Encryption constructor
