@@ -4,20 +4,21 @@
 namespace Legato\Framework\Security;
 
 
-use InvalidArgumentException;
-
+use Exception;
 
 class Gate
 {
-
     const NOT_ACTIVATED = 'Account not activated';
     const BAD_CREDENTIALS = 'These credentials do not match our records.';
     const VALID = true;
 
     /**
-     * @param array $credentials, ['username' => 'value', 'password' => 'value']
+     * Attempt to Authenticate the given user
+     *
+     * @param array $credentials
      * @param bool $remember
      * @return bool|string
+     * @throws Exception
      */
     public static function authenticate(array $credentials, $remember = false)
     {
@@ -36,7 +37,6 @@ class Gate
             !static::activationRequired($authConfig['activation'], $user)) {
 
             return static::NOT_ACTIVATED;
-
         }
 
         /**
@@ -50,6 +50,14 @@ class Gate
          * Log in user
          */
         static::loginSession($authConfig, $user);
+
+        /**
+         * Remember the user
+         */
+        if($remember)
+        {
+            static::rememberMe($authConfig, $user);
+        }
 
         return static::VALID;
     }
@@ -85,7 +93,7 @@ class Gate
     public static function user(array $authConfig, $username)
     {
         $model = $authConfig['model'];
-        $fields = $authConfig['fields'];
+        $fields = static::getFields($authConfig);
 
         if(is_array($fields) && count($fields) == 2){
             return $model::where($fields[0], $username)->orWhere($fields[1], $username)->first();
@@ -94,21 +102,46 @@ class Gate
         return $model::where($fields[0], $username)->first();
     }
 
-    public static function remember($user)
-    {
-
-    }
-
     /**
      * Set login session
      *
      * @param array $authConfig
      * @param $user
+     * @throws \Exception
      */
     public static function loginSession(array $authConfig, $user)
     {
-        $fields = $authConfig['fields'];
-        $key = $fields[0];
-        session()->set('log_me_in', $user->$key);
+        $key = static::getFields($authConfig, true);
+        $encrypted = encrypt($user->$key);
+        session()->set('log_me_in', $encrypted);
+    }
+
+    /**
+     * Remember the user for 14 days
+     *
+     * @param array $authConfig
+     *
+     * @param $user
+     * @return void
+     * @throws \Exception
+     */
+    public static function rememberMe(array $authConfig, $user)
+    {
+        $key = static::getFields($authConfig, true);
+        $token = encrypt($user->$key);
+
+        setCookie('remember_token', $token, time() + (86400 * 14));
+    }
+
+    /**
+     * Get the field for authentication
+     *
+     * @param array $authConfig
+     * @param bool $first
+     * @return mixed
+     */
+    public static function getFields(array $authConfig, $first = false)
+    {
+        return $first !== false ? $authConfig['fields'][0] : $authConfig['fields'];
     }
 }

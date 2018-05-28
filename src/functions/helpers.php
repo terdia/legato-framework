@@ -221,3 +221,65 @@ if (! function_exists('getConfigPath') ){
         return isset($path[$key]) ? $path[$key] : null;
     }
 }
+
+if(!function_exists('encrypt'))
+{
+    /**
+     * Encrypt a given value
+     *
+     * @param $value
+     * @return string
+     * @throws Exception
+     */
+    function encrypt($value)
+    {
+        return (new \Legato\Framework\Security\Encryption())->encrypt($value);
+    }
+}
+if(!function_exists('decrypt'))
+{
+    /**
+     * Decrypt the given data
+     *
+     * @param $data
+     * @return string
+     * @throws Exception
+     */
+    function decrypt($data)
+    {
+        return (new \Legato\Framework\Security\Encryption())->decrypt($data);
+    }
+}
+
+if(! function_exists('setCookie')){
+
+    /**
+     * Easy method to set cookies
+     *
+     * @param $name
+     * @param null $value
+     * @param int $expire
+     * @return array
+     */
+    function setCookie($name, $value = null, $expire = 0){
+
+        $response = new \Symfony\Component\HttpFoundation\Response;
+        $response->headers->setCookie( new Legato\Framework\Cookie\Cookie($name, $value, $expire));
+        $response->send();
+
+        return $response->headers->getCookies();
+    }
+}
+
+if(! function_exists('readCookie')){
+    /**
+     * Read cookie value
+     *
+     * @param \Legato\Framework\Request $request
+     * @param $name
+     * @return mixed
+     */
+    function readCookie(\Legato\Framework\Request $request, $name){
+        return $request->cookies()->get($name);
+    }
+}
