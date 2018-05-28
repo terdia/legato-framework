@@ -74,10 +74,11 @@ class Encryption
     {
         $key = null;
         if($cipher === static::SUPPORTED_CIPHER_32) {
-            $key = random_bytes(static::SUPPORTED_CIPHER_32_LENGTH);
-        }
 
-        if($cipher === static::SUPPORTED_CIPHER_16) {
+            $key = random_bytes(static::SUPPORTED_CIPHER_32_LENGTH);
+
+        }else if($cipher === static::SUPPORTED_CIPHER_16) {
+
             $key = random_bytes(static::SUPPORTED_CIPHER_16_LENGTH);
         }
 
