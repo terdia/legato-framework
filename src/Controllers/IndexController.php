@@ -1,4 +1,5 @@
 <?php
+
 namespace Legato\Framework\Controllers;
 
 class IndexController extends BaseController

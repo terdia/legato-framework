@@ -1,16 +1,13 @@
 <?php
 
-
 namespace Legato\Framework\Mail;
-
 
 class Mail extends Message
 {
-
     /**
-     * The mail driver specified in .env file
+     * The mail driver specified in .env file.
      *
-     * @var $driver
+     * @var
      */
     public static $driver;
 
@@ -23,13 +20,12 @@ class Mail extends Message
     {
         self::setDriver();
 
-        switch (strtolower(static::$driver))
-        {
+        switch (strtolower(static::$driver)) {
             case 'smtp':
-                return new SMTPClient;
+                return new SMTPClient();
                 break;
             case 'mailgun':
-                return new MailGunClient;
+                return new MailGunClient();
                 break;
             default:
                 die('driver not found');
@@ -37,38 +33,37 @@ class Mail extends Message
     }
 
     /**
-     * Send message using chosen driver
+     * Send message using chosen driver.
      *
      * @param $params
+     *
      * @return int|mixed
      */
     public static function send($params)
     {
         $params = array_merge([
-            'subject' => '',
-            'view' => '',
-            'body' => '',
+            'subject'  => '',
+            'view'     => '',
+            'body'     => '',
             'bodyHtml' => '',
-            'to' => [],
-            'bcc' => [],
-            'cc' => [],
-            'replyTo' => [],
-            'file' => ''
+            'to'       => [],
+            'bcc'      => [],
+            'cc'       => [],
+            'replyTo'  => [],
+            'file'     => '',
         ], $params);
 
         $message = (new static())->to($params['to'])->from($params['from'])
             ->subject($params['subject'])->bcc($params['bcc'])->cc($params['cc'])
             ->reply($params['replyTo']);
 
-        if($params['view'] != '')
-        {
-            $message->body(makeMail($params['view'], array('data' => $params['body'])), 'text/html');
-        }else{
+        if ($params['view'] != '') {
+            $message->body(makeMail($params['view'], ['data' => $params['body']]), 'text/html');
+        } else {
             $message->body($params['body']);
         }
 
-        if($params['file'] != '')
-        {
+        if ($params['file'] != '') {
             $message->attachment($params['file']);
         }
 

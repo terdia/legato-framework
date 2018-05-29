@@ -1,7 +1,7 @@
 <?php
 
-
 namespace Legato\Framework;
+
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -9,19 +9,19 @@ use Symfony\Component\Console\Input\InputOption;
 abstract class Command extends SymfonyCommand
 {
     /**
-     * Identifier for the console command
+     * Identifier for the console command.
      *
      * @var string
      */
     protected $commandName;
-    
+
     /**
-     * Command description
+     * Command description.
      *
      * @var string
      */
     protected $description;
-    
+
     public function __construct($name = null)
     {
         parent::__construct($name);
@@ -30,10 +30,10 @@ abstract class Command extends SymfonyCommand
     }
 
     /**
-     * Add argument to a command
+     * Add argument to a command.
      *
      * @param $name, the argument name
-     * @param bool $required, is it required
+     * @param bool   $required,   is it required
      * @param string $description
      */
     public function setArguments($name, $required = false, $description = 'Argument description')
@@ -43,7 +43,7 @@ abstract class Command extends SymfonyCommand
     }
 
     /**
-     * Add options to command
+     * Add options to command.
      *
      * @param $name, the option name
      * @param null $shortcut

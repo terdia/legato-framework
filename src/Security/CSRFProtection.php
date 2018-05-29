@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Legato\Framework\Security;
-
 
 use Legato\Framework\Request;
 
@@ -12,7 +10,8 @@ class CSRFProtection
 
     /**
      * URI that the developer choose to skip CSRF Verification for
-     * e.g /thanks which should match your route target
+     * e.g /thanks which should match your route target.
+     *
      * @var array
      */
     protected $skipValidation = [];
@@ -23,10 +22,11 @@ class CSRFProtection
     }
 
     /**
-     * Run CSRF Validation verification
+     * Run CSRF Validation verification.
+     *
+     * @throws TokenMisMatchException
      *
      * @return bool
-     * @throws TokenMisMatchException
      */
     public function handle()
     {
@@ -34,16 +34,15 @@ class CSRFProtection
     }
 
     /**
-     * Validate POST | PUT | PATCH request token
+     * Validate POST | PUT | PATCH request token.
+     *
+     * @throws TokenMisMatchException
      *
      * @return bool
-     * @throws TokenMisMatchException
      */
     protected function validate()
     {
-
-        if($this->isSafeRequest() || $this->isAllowedByDeveloper() || $this->verify())
-        {
+        if ($this->isSafeRequest() || $this->isAllowedByDeveloper() || $this->verify()) {
             return true;
         }
 
@@ -51,7 +50,7 @@ class CSRFProtection
     }
 
     /**
-     * Verify CSRF Token
+     * Verify CSRF Token.
      */
     protected function verify()
     {
@@ -61,23 +60,25 @@ class CSRFProtection
     }
 
     /**
-     * extract token from form or JavaScript Clients like Axios, Ajax, JQuery
+     * extract token from form or JavaScript Clients like Axios, Ajax, JQuery.
      *
      * @return bool|string|string[]
      */
     protected function extractToken()
     {
-        if($this->request->input('token') === false) {
-            if( !$this->request->getHeader('X-JS-CLIENTS-TOKEN') ){
+        if ($this->request->input('token') === false) {
+            if (!$this->request->getHeader('X-JS-CLIENTS-TOKEN')) {
                 return 'token';
             }
+
             return $this->request->getHeader('X-JS-CLIENTS-TOKEN');
         }
+
         return $this->request->input('token');
     }
 
     /**
-     * Check if URI does not require CSRF Validation
+     * Check if URI does not require CSRF Validation.
      */
     protected function isAllowedByDeveloper()
     {
@@ -86,7 +87,7 @@ class CSRFProtection
 
     /**
      * Methods for viewing resources 'HEAD', 'GET', 'OPTIONS' and Unit
-     * test does not require CSRF Validation such methods are considered safe
+     * test does not require CSRF Validation such methods are considered safe.
      *
      * @return bool
      */
@@ -97,13 +98,13 @@ class CSRFProtection
     }
 
     /**
-     * Get the generate token from storage
+     * Get the generate token from storage.
      *
      * @return mixed|string
      */
     protected function tokenFromStorage()
     {
-        if($this->request->session()->has('token')){
+        if ($this->request->session()->has('token')) {
             return $this->request->session()->get('token');
         }
 
@@ -111,16 +112,16 @@ class CSRFProtection
     }
 
     /**
-     * Determine if application is running from test mode
+     * Determine if application is running from test mode.
      *
      * @return bool
      */
     protected function isTestMode()
     {
-        if(isRunningFromConsole() && (defined('PHPUNIT_RUNNING') && PHPUNIT_RUNNING == true)){
+        if (isRunningFromConsole() && (defined('PHPUNIT_RUNNING') && PHPUNIT_RUNNING == true)) {
             return true;
         }
+
         return false;
     }
-
 }

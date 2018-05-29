@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Legato\Framework\Mail;
 
-use Swift_SmtpTransport;
 use Swift_Mailer;
+use Swift_SmtpTransport;
 
 class SMTPClient
 {
@@ -56,5 +55,4 @@ class SMTPClient
     {
         return $this->mailer->send($message);
     }
-
 }

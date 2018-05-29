@@ -1,4 +1,5 @@
 <?php
+
 namespace Framework\Tests;
 
 use Legato\Framework\Mail\Mail;
@@ -6,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class MailTest extends TestCase
 {
-
     /**
      * @test
      */
@@ -15,7 +15,7 @@ class MailTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
+    /*
      * @test
      */
     /*public function can_send_email_with_user_selected_driver()
@@ -42,5 +42,4 @@ class MailTest extends TestCase
         }
 
     }*/
-
 }
