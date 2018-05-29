@@ -1,35 +1,37 @@
 <?php
+
 use Legato\Framework\Session\Session;
 
-if (! function_exists('view')) {
+if (!function_exists('view')) {
     /**
-     * Render view
+     * Render view.
+     *
      * @param $view
      * @param array $data
      * @param array $options
+     *
      * @throws Twig_Error_Loader
      * @throws Twig_Error_Runtime
      * @throws Twig_Error_Syntax
      */
     function view($view, $data = [], $options = []):void
     {
-        getenv('FRAMEWORK') == 'developer'?$path_to_views = realpath(__DIR__ . '/../../resources/views'):
+        getenv('FRAMEWORK') == 'developer' ? $path_to_views = realpath(__DIR__.'/../../resources/views') :
             $path_to_views = realpath(__DIR__.'/../../../../../resources/views');
-        
-        switch (getenv('TEMPLATE_ENGINE'))
-        {
+
+        switch (getenv('TEMPLATE_ENGINE')) {
             case 'blade':
-                
+
                 new \Legato\Framework\Blade($view, $data);
                 break;
-                
+
             default:
                 new \Legato\Framework\Twig($view, $data, $options);
         }
     }
 }
 
-if (! function_exists('redirectTo')) {
+if (!function_exists('redirectTo')) {
     function redirectTo($path)
     {
         //ob_start();
@@ -37,26 +39,27 @@ if (! function_exists('redirectTo')) {
     }
 }
 
-/**
+/*
  * @deprecated
  */
-if (! function_exists('flash')) {
+if (!function_exists('flash')) {
     function flash(Session $session, $name):string
     {
-        foreach ($session->getFlashBag()->get($name, array()) as $message) {
-            return $message?:null;
+        foreach ($session->getFlashBag()->get($name, []) as $message) {
+            return $message ?: null;
         }
 
         return '';
     }
 }
 
-if (! function_exists('config')) {
+if (!function_exists('config')) {
     /**
-     * Get value from environment variable or default
+     * Get value from environment variable or default.
      *
      * @param $key
      * @param null $default
+     *
      * @return array|false|null|string
      */
     function config($key, $default = null)
@@ -65,9 +68,9 @@ if (! function_exists('config')) {
     }
 }
 
-if (! function_exists('filesystem')){
+if (!function_exists('filesystem')) {
     /**
-     * Get instance of symfony filesystem
+     * Get instance of symfony filesystem.
      *
      * @return \Symfony\Component\Filesystem\Filesystem
      */
@@ -77,13 +80,13 @@ if (! function_exists('filesystem')){
     }
 }
 
-if (! function_exists('makeMail') )
-{
+if (!function_exists('makeMail')) {
     /**
-     * Send email from a file
+     * Send email from a file.
      *
      * @param $path
      * @param $data
+     *
      * @return string
      */
     function makeMail($path, $data)
@@ -91,34 +94,35 @@ if (! function_exists('makeMail') )
         extract($data);
         ob_start();
 
-        if(filesystem()->exists(realpath(__DIR__.'/../../../../../resources/views')))
-        {
-            include( __DIR__.'/../../../../../resources/views/'. $path );
-        }else{
-            include(__DIR__.'/../../resources/views/'.$path);
+        if (filesystem()->exists(realpath(__DIR__.'/../../../../../resources/views'))) {
+            include __DIR__.'/../../../../../resources/views/'.$path;
+        } else {
+            include __DIR__.'/../../resources/views/'.$path;
         }
 
         $content = ob_get_contents();
         ob_end_clean();
+
         return $content;
     }
 }
 
-if(! function_exists('session')) {
+if (!function_exists('session')) {
     /**
-     * session instance
+     * session instance.
      */
     function session()
     {
         $session = Session::getInstance();
-        if(!$session->isStarted()){
+        if (!$session->isStarted()) {
             $session->start();
-        };
+        }
+
         return $session;
     }
 }
 
-if (! function_exists('csrf_token_field')) {
+if (!function_exists('csrf_token_field')) {
     /**
      * Generate a CSRF token hidden input field.
      */
@@ -128,41 +132,43 @@ if (! function_exists('csrf_token_field')) {
     }
 }
 
-if (! function_exists('token') ) {
+if (!function_exists('token')) {
     /**
-     * Generate a CSRF token
+     * Generate a CSRF token.
      */
     function token()
     {
         $session = session();
 
-        if($session->has('token')){
+        if ($session->has('token')) {
             return $session->get('token');
         }
 
-        $token = base64_encode( openssl_random_pseudo_bytes(32));
+        $token = base64_encode(openssl_random_pseudo_bytes(32));
         $session->set('token', $token);
 
         return $token;
     }
 }
 
-if (! function_exists('isRunningFromConsole') ) {
+if (!function_exists('isRunningFromConsole')) {
     /**
-     * Determine if application is running from commandline
+     * Determine if application is running from commandline.
      *
      * @return bool
      */
-    function isRunningFromConsole() {
+    function isRunningFromConsole()
+    {
         return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
     }
 }
 
-if(! function_exists('secret') ) {
+if (!function_exists('secret')) {
     /**
-     * Hash a given string
+     * Hash a given string.
      *
      * @param $plainText
+     *
      * @return bool|string
      */
     function secret($plainText)
@@ -173,12 +179,13 @@ if(! function_exists('secret') ) {
     }
 }
 
-if(! function_exists('verify_secret') ) {
+if (!function_exists('verify_secret')) {
     /**
-     * Verify that a given string matches stored hash
+     * Verify that a given string matches stored hash.
      *
      * @param $plainText
      * @param $hash
+     *
      * @return bool
      */
     function verify_secret($plainText, $hash)
@@ -189,10 +196,9 @@ if(! function_exists('verify_secret') ) {
     }
 }
 
-if (! function_exists('user'))
-{
+if (!function_exists('user')) {
     /**
-     * Get the authenticated user
+     * Get the authenticated user.
      *
      * @return mixed
      */
@@ -202,19 +208,20 @@ if (! function_exists('user'))
     }
 }
 
-if (! function_exists('getConfigPath') ){
+if (!function_exists('getConfigPath')) {
 
     /**
-     * get the desired config path
+     * get the desired config path.
      *
      * @param $path
+     *
      * @return mixed
      */
     function getConfigPath($path, $key = null)
     {
-        $path = require realpath(__DIR__ . '/../../../../../config/'.$path.'.php');
+        $path = require realpath(__DIR__.'/../../../../../config/'.$path.'.php');
 
-        if($key == null) {
+        if ($key == null) {
             return $path;
         }
 
@@ -222,28 +229,30 @@ if (! function_exists('getConfigPath') ){
     }
 }
 
-if(!function_exists('encrypt'))
-{
+if (!function_exists('encrypt')) {
     /**
-     * Encrypt a given value
+     * Encrypt a given value.
      *
      * @param $value
-     * @return string
+     *
      * @throws Exception
+     *
+     * @return string
      */
     function encrypt($value)
     {
         return (new \Legato\Framework\Security\Encryption())->encrypt($value);
     }
 }
-if(!function_exists('decrypt'))
-{
+if (!function_exists('decrypt')) {
     /**
-     * Decrypt the given data
+     * Decrypt the given data.
      *
      * @param $data
-     * @return string
+     *
      * @throws Exception
+     *
+     * @return string
      */
     function decrypt($data)
     {
@@ -251,35 +260,38 @@ if(!function_exists('decrypt'))
     }
 }
 
-if(! function_exists('setCookie')){
+if (!function_exists('setCookie')) {
 
     /**
-     * Easy method to set cookies
+     * Easy method to set cookies.
      *
      * @param $name
      * @param null $value
-     * @param int $expire
+     * @param int  $expire
+     *
      * @return array
      */
-    function setCookie($name, $value = null, $expire = 0){
-
-        $response = new \Symfony\Component\HttpFoundation\Response;
-        $response->headers->setCookie( new Legato\Framework\Cookie\Cookie($name, $value, $expire));
+    function setCookie($name, $value = null, $expire = 0)
+    {
+        $response = new \Symfony\Component\HttpFoundation\Response();
+        $response->headers->setCookie(new Legato\Framework\Cookie\Cookie($name, $value, $expire));
         $response->send();
 
         return $response->headers->getCookies();
     }
 }
 
-if(! function_exists('readCookie')){
+if (!function_exists('readCookie')) {
     /**
-     * Read cookie value
+     * Read cookie value.
      *
      * @param \Legato\Framework\Request $request
      * @param $name
+     *
      * @return mixed
      */
-    function readCookie(\Legato\Framework\Request $request, $name){
+    function readCookie(\Legato\Framework\Request $request, $name)
+    {
         return $request->cookies()->get($name);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Legato\Framework\Profiler;
 
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -8,16 +7,17 @@ use Symfony\Component\Stopwatch\Stopwatch;
 class Profiler extends Stopwatch
 {
     /**
-     * Profiler Event Handler
+     * Profiler Event Handler.
      *
      * @var
      */
     protected $event;
 
     /**
-     * Stop the event and set the event handler
+     * Stop the event and set the event handler.
      *
      * @param string $name
+     *
      * @return \Symfony\Component\Stopwatch\StopwatchEvent
      */
     public function stop($name)
@@ -26,7 +26,7 @@ class Profiler extends Stopwatch
     }
 
     /**
-     * Convert start time to datetime from milliseconds
+     * Convert start time to datetime from milliseconds.
      *
      * @return false|null|string
      */
@@ -34,11 +34,12 @@ class Profiler extends Stopwatch
     {
         $milliseconds = $this->event->getOrigin();
         $seconds = $milliseconds / 1000;
+
         return is_float($seconds) ? date('Y-m-d H:i:s', $seconds) : null;
     }
 
     /**
-     * returns the event duration, including all periods
+     * returns the event duration, including all periods.
      *
      * @return mixed
      */
@@ -48,7 +49,7 @@ class Profiler extends Stopwatch
     }
 
     /**
-     * the category the event was started in
+     * the category the event was started in.
      *
      * @return mixed
      */
@@ -58,7 +59,7 @@ class Profiler extends Stopwatch
     }
 
     /**
-     * the start time of the very first period
+     * the start time of the very first period.
      *
      * @return mixed
      */
@@ -68,7 +69,7 @@ class Profiler extends Stopwatch
     }
 
     /**
-     * the end time of the very last period
+     * the end time of the very last period.
      *
      * @return mixed
      */
@@ -79,7 +80,7 @@ class Profiler extends Stopwatch
 
     /**
      * the max memory usage of all periods
-     * The memory usage (in bytes)
+     * The memory usage (in bytes).
      *
      * @return mixed
      */
@@ -94,7 +95,7 @@ class Profiler extends Stopwatch
     }
 
     /**
-     * stops all periods not already stopped
+     * stops all periods not already stopped.
      *
      * @return mixed
      */
@@ -104,16 +105,16 @@ class Profiler extends Stopwatch
     }
 
     /**
-     * Stop a session and return the event data
+     * Stop a session and return the event data.
      *
      * @param $name
+     *
      * @return \Symfony\Component\Stopwatch\StopwatchEvent[]
      */
     public function sectionStop($name)
     {
         $this->stopSection($name);
+
         return $this->getSectionEvents($name);
     }
-
 }
-

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Legato\Framework\Validator;
-
 
 class AbstractRule
 {
@@ -15,5 +13,4 @@ class AbstractRule
     {
         return $value != null && !empty($this->removeSpaces($value));
     }
-
 }

@@ -1,8 +1,8 @@
 <?php
+
 namespace Legato\Framework\Controllers;
 
 use Legato\Framework\Request;
-
 
 class BaseController
 {
@@ -12,5 +12,4 @@ class BaseController
     {
         $this->request = $request;
     }
-
 }

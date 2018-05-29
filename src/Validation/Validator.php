@@ -1,12 +1,9 @@
 <?php
 
-
 namespace Legato\Framework\Validator;
-
 
 class Validator
 {
-
     protected $messages;
 
     protected $errorHandler;
@@ -21,7 +18,7 @@ class Validator
     }
 
     /**
-     * Perform validation for the data provider and set error messages
+     * Perform validation for the data provider and set error messages.
      *
      * @param array $data
      */
@@ -29,10 +26,10 @@ class Validator
     {
         $field = $data['field'];
 
-        foreach ($data['policies'] as $rule => $policy){
-            $passes = call_user_func_array([new Rule, $rule], [$field, $data['value'], $policy]);
+        foreach ($data['policies'] as $rule => $policy) {
+            $passes = call_user_func_array([new Rule(), $rule], [$field, $data['value'], $policy]);
 
-            if(!$passes){
+            if (!$passes) {
                 ErrorHandler::set(
                     str_replace(
                         [':attribute', ':policy', '_'],
@@ -43,7 +40,7 @@ class Validator
     }
 
     /**
-     * @param array $data, fields and values pair under validation
+     * @param array $data,     fields and values pair under validation
      * @param array $policies, the rules that validation must satisfy
      * @param array $messages, custom validation messages
      */
@@ -51,9 +48,9 @@ class Validator
     {
         $this->customMessages = $messages;
         $this->messages = ErrorHandler::getValidationMessages($this->customMessages);
-        foreach ($data as $field => $value){
-            if(in_array($field, array_keys($policies))){
-               $this->parseData(
+        foreach ($data as $field => $value) {
+            if (in_array($field, array_keys($policies))) {
+                $this->parseData(
                     ['field' => $field, 'value' => $value, 'policies' => $policies[$field]]
                 );
             }
@@ -61,7 +58,7 @@ class Validator
     }
 
     /**
-     * Check if validation failed
+     * Check if validation failed.
      *
      * @return bool
      */
@@ -71,20 +68,22 @@ class Validator
     }
 
     /**
-     * Set the error messages
+     * Set the error messages.
      *
      * @return $this
      */
     public function error()
     {
         $this->errors = ErrorHandler::all();
+
         return $this;
     }
 
     /**
-     * Check if a given key exists in error message
+     * Check if a given key exists in error message.
      *
      * @param $key
+     *
      * @return bool
      */
     public function has($key)
@@ -93,9 +92,10 @@ class Validator
     }
 
     /**
-     * Get the first element in the validation error array for given key
+     * Get the first element in the validation error array for given key.
      *
      * @param null $key
+     *
      * @return mixed
      */
     public function first($key = null)
@@ -104,9 +104,10 @@ class Validator
     }
 
     /**
-     * Get all error messages or all errors under a specified key
+     * Get all error messages or all errors under a specified key.
      *
      * @param null $key
+     *
      * @return mixed
      */
     public function get($key = null)

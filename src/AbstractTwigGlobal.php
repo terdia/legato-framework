@@ -1,4 +1,5 @@
 <?php
+
 namespace Legato\Framework;
 
 use Legato\Framework\Session\SessionManager;

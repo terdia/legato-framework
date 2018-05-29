@@ -1,19 +1,18 @@
 <?php
 
-
 namespace Legato\Framework\Security;
 
-use RuntimeException, Exception;
+use Exception;
+use RuntimeException;
 
 class Encryption
 {
-
     protected $key;
 
     protected $cipher;
 
     /**
-     * Supported ciphers, and length
+     * Supported ciphers, and length.
      */
     const SUPPORTED_CIPHER_16 = 'AES-128-CBC';
     const SUPPORTED_CIPHER_32 = 'AES-256-CBC';
@@ -21,7 +20,7 @@ class Encryption
     const SUPPORTED_CIPHER_16_LENGTH = 16;
 
     /**
-     * Encryption constructor
+     * Encryption constructor.
      */
     public function __construct()
     {
@@ -29,9 +28,9 @@ class Encryption
         $key = $config['key'];
         $cipher = $config['cipher'];
 
-        if(!static::valid((string) $key, $cipher)) {
+        if (!static::valid((string) $key, $cipher)) {
             throw new RuntimeException(
-                "Legato framework only support AES-256-CBC and AES-128-CBC ciphers"
+                'Legato framework only support AES-256-CBC and AES-128-CBC ciphers'
             );
         }
 
@@ -40,45 +39,43 @@ class Encryption
     }
 
     /**
-     * Check if the given key and cipher have valid length and name
+     * Check if the given key and cipher have valid length and name.
      *
      * @param $key
      * @param $cipher
+     *
      * @return bool
      */
     public static function valid($key, $cipher)
     {
         $keyLength = mb_strlen($key, '8bit');
 
-        if(static::SUPPORTED_CIPHER_32_LENGTH === $keyLength
-            && $cipher === static::SUPPORTED_CIPHER_32)
-        {
+        if (static::SUPPORTED_CIPHER_32_LENGTH === $keyLength
+            && $cipher === static::SUPPORTED_CIPHER_32) {
             return true;
         }
 
-        if(static::SUPPORTED_CIPHER_16_LENGTH == $keyLength
-            && $cipher === static::SUPPORTED_CIPHER_16)
-        {
+        if (static::SUPPORTED_CIPHER_16_LENGTH == $keyLength
+            && $cipher === static::SUPPORTED_CIPHER_16) {
             return true;
         }
     }
 
     /**
-     * Generate encryption key
+     * Generate encryption key.
      *
      * @param $cipher
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function generateEncryptionKey($cipher)
     {
         $key = null;
-        if($cipher === static::SUPPORTED_CIPHER_32) {
-
+        if ($cipher === static::SUPPORTED_CIPHER_32) {
             $key = random_bytes(static::SUPPORTED_CIPHER_32_LENGTH);
-
-        }else if($cipher === static::SUPPORTED_CIPHER_16) {
-
+        } elseif ($cipher === static::SUPPORTED_CIPHER_16) {
             $key = random_bytes(static::SUPPORTED_CIPHER_16_LENGTH);
         }
 
@@ -86,27 +83,29 @@ class Encryption
     }
 
     /**
-     * Encrypt the value
+     * Encrypt the value.
      *
      * @param $value
-     * @return string
+     *
      * @throws Exception
+     *
+     * @return string
      */
     public function encrypt($value)
     {
         /**
-         * Gets the cipher iv length
+         * Gets the cipher iv length.
          */
         $iv = random_bytes(openssl_cipher_iv_length($this->cipher));
 
         /**
-         * Encrypts the given value
+         * Encrypts the given value.
          */
         $value = \openssl_encrypt($value, $this->cipher, $this->key, 0, $iv);
 
         $hash_mac = $this->mac($iv = base64_encode($iv), $value);
 
-        if( !$value ) {
+        if (!$value) {
             throw new Exception('Unable to encrypt given value');
         }
 
@@ -120,11 +119,13 @@ class Encryption
     }
 
     /**
-     * Decrypt the given data and return plain text
+     * Decrypt the given data and return plain text.
      *
      * @param $data
-     * @return string
+     *
      * @throws Exception
+     *
+     * @return string
      */
     public function decrypt($data)
     {
@@ -132,18 +133,20 @@ class Encryption
 
         $iv = base64_decode($data['iv']);
 
-        if(!$this->isEncryptedDataValid($data)) throw new Exception('The given encrypted data is invalid.');
-
-        if(!$this->isMacValid($data, 16)) throw new Exception('The hash is invalid.');
-
+        if (!$this->isEncryptedDataValid($data)) {
+            throw new Exception('The given encrypted data is invalid.');
+        }
+        if (!$this->isMacValid($data, 16)) {
+            throw new Exception('The hash is invalid.');
+        }
         /**
-         * try to decrypt
+         * try to decrypt.
          */
         $decrypted = \openssl_decrypt(
             $data['value'], $this->cipher, $this->key, 0, $iv
         );
 
-        /**
+        /*
          * throw exception is we cannot decrypt
          */
         if ($decrypted === false) {
@@ -154,9 +157,10 @@ class Encryption
     }
 
     /**
-     * Check if the encrypted data is still valid
+     * Check if the encrypted data is still valid.
      *
      * @param $data
+     *
      * @return bool
      */
     protected function isEncryptedDataValid($data)
@@ -167,10 +171,11 @@ class Encryption
     }
 
     /**
-     * Determine if hash is valid
+     * Determine if hash is valid.
      *
      * @param $data
      * @param $bytes
+     *
      * @return bool
      */
     protected function isMacValid($data, $bytes)
@@ -185,15 +190,15 @@ class Encryption
     }
 
     /**
-     * hash the given value
+     * hash the given value.
      *
      * @param $iv
      * @param $value
+     *
      * @return string
      */
     protected function mac($iv, $value)
     {
         return hash_hmac('sha384', $iv.$value, $this->key);
     }
-
 }
