@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
+
 return [
     'string'   => 'The :attribute field must be of type string e.g. Terry Osayawe',
     'required' => 'The :attribute field is required',
