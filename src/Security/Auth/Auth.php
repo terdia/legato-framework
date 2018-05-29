@@ -1,29 +1,38 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
+
 namespace Legato\Framework\Security;
 
-
-use Legato\Framework\Request;
 use Exception;
+use Legato\Framework\Request;
 
 class Auth
 {
     /**
-     * logout redirect path
+     * logout redirect path.
      *
      * @var string
      */
     protected $logoutRedirectTo = '/login';
 
     /**
-     * Login redirect path
+     * Login redirect path.
      *
      * @var string
      */
     protected $loginRedirectTo = '/';
 
     /**
-     * Get the authenticated user
+     * Get the authenticated user.
      *
      * @return mixed
      */
@@ -31,10 +40,9 @@ class Auth
     {
         $log_me_in = session()->get('log_me_in');
 
-        try{
+        try {
             $decrypted = decrypt($log_me_in);
-
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             return false;
         }
 
@@ -44,7 +52,7 @@ class Auth
     }
 
     /**
-     * Check if the current user is authenticated
+     * Check if the current user is authenticated.
      *
      * @return bool
      */
@@ -54,22 +62,22 @@ class Auth
     }
 
     /**
-     * Check remember user
+     * Check remember user.
      *
      * @param Request $request
+     *
      * @return bool|mixed
      */
     public static function remembered(Request $request)
     {
         $remember = readCookie($request, 'remember_token');
-        if($remember != null)
-        {
-            try{
+        if ($remember != null) {
+            try {
                 $decrypted = decrypt($remember);
                 $authConfig = getConfigPath('app', 'auth');
 
                 return Gate::user($authConfig, $decrypted);
-            }catch (\Exception $ex){
+            } catch (\Exception $ex) {
                 return false;
             }
         }
@@ -78,41 +86,43 @@ class Auth
     }
 
     /**
-     * Logout the user
+     * Logout the user.
      */
     public static function logout()
     {
         session()->invalidate(0);
-        setCookie('remember_token', null, time() - 3600);
-        $instance = new static;
+        setcookie('remember_token', null, time() - 3600);
+        $instance = new static();
 
         redirectTo($instance->getLogOutRedirectPath());
     }
 
     /**
-     * Get the logout redirect path
+     * Get the logout redirect path.
      *
      * @return string
      */
     protected function getLogOutRedirectPath()
     {
         $instance = static::getInstance();
+
         return $instance->logoutRedirectTo;
     }
 
     /**
-     * Get the login redirect path
+     * Get the login redirect path.
      *
      * @return string
      */
     protected function getLoginRedirectPath()
     {
         $instance = static::getInstance();
+
         return $instance->loginRedirectTo;
     }
 
     /**
-     * Set the path for logout redirect
+     * Set the path for logout redirect.
      *
      * @param $path
      */
@@ -122,7 +132,7 @@ class Auth
     }
 
     /**
-     * Set the path for login redirect
+     * Set the path for login redirect.
      *
      * @param $path
      */
@@ -131,19 +141,20 @@ class Auth
         static::getInstance()->loginRedirectTo = $path;
     }
 
-    public static function __callStatic($method, $argument){
-        return (new static)->$method(...$argument);
+    public static function __callStatic($method, $argument)
+    {
+        return (new static())->$method(...$argument);
     }
 
     public function getInstance()
     {
-        if(isset($this)){
+        if (isset($this)) {
             $obj = $this;
         }
-        if(!isset($obj)){
-            $obj = new static;
+        if (!isset($obj)) {
+            $obj = new static();
         }
+
         return $obj;
     }
-
 }

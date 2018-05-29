@@ -1,8 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
 
 namespace Legato\Framework\Security;
-
 
 use Exception;
 
@@ -13,12 +21,14 @@ class Gate
     const VALID = true;
 
     /**
-     * Attempt to Authenticate the given user
+     * Attempt to Authenticate the given user.
      *
      * @param array $credentials
-     * @param bool $remember
-     * @return bool|string
+     * @param bool  $remember
+     *
      * @throws Exception
+     *
+     * @return bool|string
      */
     public static function authenticate(array $credentials, $remember = false)
     {
@@ -29,33 +39,31 @@ class Gate
 
         $user = static::user($authConfig, $username);
 
-        /**
+        /*
          * if authentication requires email account activation, we check the database using data provided
          * by the developer data = ['column_name' => 'activation_value'] e.g. [ 'activated' => 1 ]
          */
-        if ( $user && count($authConfig['activation']) &&
+        if ($user && count($authConfig['activation']) &&
             !static::activationRequired($authConfig['activation'], $user)) {
-
             return static::NOT_ACTIVATED;
         }
 
-        /**
+        /*
          * check for password
          */
-        if(!verify_secret($password, $user->password)){
+        if (!verify_secret($password, $user->password)) {
             return static::BAD_CREDENTIALS;
         }
 
         /**
-         * Log in user
+         * Log in user.
          */
         static::loginSession($authConfig, $user);
 
-        /**
+        /*
          * Remember the user
          */
-        if($remember)
-        {
+        if ($remember) {
             static::rememberMe($authConfig, $user);
         }
 
@@ -63,20 +71,21 @@ class Gate
     }
 
     /**
-     * Check if user account is activated
+     * Check if user account is activated.
      *
      * @param array $data
      * @param $user
+     *
      * @return bool
      */
-    public static function activationRequired( array $data, $user )
+    public static function activationRequired(array $data, $user)
     {
         $input = array_keys($data);
 
         $field = $input[0];
         $value = $data[$field];
 
-        if($user->$field != $value){
+        if ($user->$field != $value) {
             return false;
         }
 
@@ -84,10 +93,11 @@ class Gate
     }
 
     /**
-     * Get the user trying to authenticate
+     * Get the user trying to authenticate.
      *
      * @param array $authConfig
      * @param $username
+     *
      * @return mixed
      */
     public static function user(array $authConfig, $username)
@@ -95,7 +105,7 @@ class Gate
         $model = $authConfig['model'];
         $fields = static::getFields($authConfig);
 
-        if(is_array($fields) && count($fields) == 2){
+        if (is_array($fields) && count($fields) == 2) {
             return $model::where($fields[0], $username)->orWhere($fields[1], $username)->first();
         }
 
@@ -103,10 +113,11 @@ class Gate
     }
 
     /**
-     * Set login session
+     * Set login session.
      *
      * @param array $authConfig
      * @param $user
+     *
      * @throws \Exception
      */
     public static function loginSession(array $authConfig, $user)
@@ -117,27 +128,29 @@ class Gate
     }
 
     /**
-     * Remember the user for 14 days
+     * Remember the user for 14 days.
      *
      * @param array $authConfig
-     *
      * @param $user
-     * @return void
+     *
      * @throws \Exception
+     *
+     * @return void
      */
     public static function rememberMe(array $authConfig, $user)
     {
         $key = static::getFields($authConfig, true);
         $token = encrypt($user->$key);
 
-        setCookie('remember_token', $token, time() + (86400 * 14));
+        setcookie('remember_token', $token, time() + (86400 * 14));
     }
 
     /**
-     * Get the field for authentication
+     * Get the field for authentication.
      *
      * @param array $authConfig
-     * @param bool $first
+     * @param bool  $first
+     *
      * @return mixed
      */
     public static function getFields(array $authConfig, $first = false)

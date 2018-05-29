@@ -1,32 +1,43 @@
 <?php
-use Whoops\Run;
-use Legato\Framework\Request;
+
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
+
 use Illuminate\Container\Container;
-use Legato\Framework\Routing\RouteDispatcher;
-use Whoops\Handler\PrettyPageHandler;
-use Symfony\Component\HttpFoundation\Response;
+use Legato\Framework\Request;
 use Legato\Framework\Routing\Route;
+use Legato\Framework\Routing\RouteDispatcher;
+use Symfony\Component\HttpFoundation\Response;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
 
-define('BASE_PATH', realpath(__DIR__.'/'). DIRECTORY_SEPARATOR);
+define('BASE_PATH', realpath(__DIR__.'/').DIRECTORY_SEPARATOR);
 
-require_once __DIR__ . "/vendor/autoload.php";
+require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/routes/routes.php';
 
 $dot_env = new Dotenv\Dotenv(BASE_PATH);
 $dot_env->load();
 
-$whoops = new Run;
+$whoops = new Run();
 $container = Container::getInstance();
 $request = Request::createFromGlobals();
 
-/**
+/*
  * Initialize database connection
  */
 new \Legato\Framework\Connection();
 
 if (getenv('APP_ENV') !== 'production') {
     $whoops->pushHandler(
-        new PrettyPageHandler
+        new PrettyPageHandler()
     );
 } else {
     $whoops->pushHandler(
@@ -40,5 +51,3 @@ $whoops->register();
 
 $dispatcher = Route::all();
 new RouteDispatcher($request, $container, $dispatcher);
-
-

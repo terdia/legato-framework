@@ -1,11 +1,21 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
+
 namespace Legato\Framework\Routing;
 
+use AltoRouter;
+use Illuminate\Container\Container;
 use Legato\Framework\App;
 use Legato\Framework\Request;
-use Illuminate\Container\Container;
-use AltoRouter;
 
 class RouteDispatcher
 {
@@ -16,7 +26,7 @@ class RouteDispatcher
     {
         $this->app = new App($container);
 
-        /**
+        /*
          * if the user is accessing the app via localhost/project/public
          * we set the parse the request uri so that it matches a defined route
          */
@@ -24,39 +34,39 @@ class RouteDispatcher
 
         $this->dispatcher = $router->match();
 
-        if($this->dispatcher){
+        if ($this->dispatcher) {
             $this->app->boot();
             $this->handle($this->dispatcher['target'], $this->dispatcher['params']);
-        }else{
+        } else {
             header($_SERVER['SERVER_PROTOCOL'].'404 Not Found');
             view('errors/404');
         }
     }
 
     /**
-     * Handler for route found, support Closure and Controller methods
+     * Handler for route found, support Closure and Controller methods.
      *
      * @param $handler
      * @param $parameters
      */
     private function handle($handler, $parameters)
     {
-        if($handler instanceof \Closure){
+        if ($handler instanceof \Closure) {
             $this->app->execute($handler, $parameters);
-
-        }else{
+        } else {
             list($controller, $action) = explode('@', $handler);
 
             $class = $this->app->construct($controller);
-            $this->app->execute(array($class, $action), $parameters);
+            $this->app->execute([$class, $action], $parameters);
         }
     }
 
     /**
      * We attempt to parse direct request to localhost/public/
-     * or localhost/public/index.php
+     * or localhost/public/index.php.
      *
      * @param $uri
+     *
      * @return bool|string
      */
     private function prepareUriForLocalhostAccess($uri)
@@ -64,11 +74,9 @@ class RouteDispatcher
         $public = 'public';
         $index = 'index.php';
 
-        if(strpos($uri, $index))
-        {
+        if (strpos($uri, $index)) {
             return substr($uri, strpos($uri, $index) + strlen($index));
-        }else if(strpos($uri, $public))
-        {
+        } elseif (strpos($uri, $public)) {
             return substr($uri, strpos($uri, $public) + strlen($public));
         }
 
@@ -76,13 +84,13 @@ class RouteDispatcher
     }
 
     /**
-     * Get the request uri
+     * Get the request uri.
      *
      * @param $uri
      */
     private function setRequestUri($uri)
     {
-        if($this->prepareUriForLocalhostAccess($uri)){
+        if ($this->prepareUriForLocalhostAccess($uri)) {
             $_SERVER['REQUEST_URI'] = $this->prepareUriForLocalhostAccess($uri);
         }
     }

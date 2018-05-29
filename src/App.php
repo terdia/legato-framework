@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
 
 namespace Legato\Framework;
 
@@ -9,19 +18,19 @@ use Legato\Framework\Security\CSRFProtection;
 class App
 {
     /**
-     * Application version number
+     * Application version number.
      */
     const VERSION = '1.1.6';
 
     /**
-     * Application name
+     * Application name.
      */
     const NAME = 'Legato Framework';
 
     /**
-     * IOC container
+     * IOC container.
      *
-     * @var $container
+     * @var
      */
     protected $container;
 
@@ -37,7 +46,7 @@ class App
     }
 
     /**
-     * Application boot method
+     * Application boot method.
      */
     public function boot()
     {
@@ -45,34 +54,36 @@ class App
     }
 
     /**
-     * Resolve application boot middleware
+     * Resolve application boot middleware.
      */
     protected function bootMiddleWares()
     {
-        if(isset($this->middleWares['boot']) && count($this->middleWares['boot'])){
-            foreach ($this->middleWares['boot'] as $middleware => $handler){
-                $this->container->call(array($this->container->make($middleware), $handler));
+        if (isset($this->middleWares['boot']) && count($this->middleWares['boot'])) {
+            foreach ($this->middleWares['boot'] as $middleware => $handler) {
+                $this->container->call([$this->container->make($middleware), $handler]);
             }
+
             return [];
         }
 
         /**
-         * Framework development mood
+         * Framework development mood.
          */
-        $CSRFProtection =  $this->container->make(CSRFProtection::class);
-        return $this->container->call(array($CSRFProtection, 'handle'));
+        $CSRFProtection = $this->container->make(CSRFProtection::class);
+
+        return $this->container->call([$CSRFProtection, 'handle']);
     }
 
     /**
-     * Application dependency binding to container
+     * Application dependency binding to container.
      *
      * @param array $dependencies
      */
     protected function resolveDependencies(array $dependencies)
     {
-       foreach ($dependencies as $dependency => $type){
-           call_user_func_array([$this, $type], [$dependency]);
-       }
+        foreach ($dependencies as $dependency => $type) {
+            call_user_func_array([$this, $type], [$dependency]);
+        }
     }
 
     /**
@@ -106,36 +117,38 @@ class App
     }
 
     /**
-     * Get all registered middleware
+     * Get all registered middleware.
      *
      * @return array|mixed
      */
     protected function getMiddleWares()
     {
-        if(file_exists(realpath(__DIR__ . '/../../../../app/middleware/register.php'))){
-           return require_once realpath(__DIR__ . '/../../../../app/middleware/register.php');
+        if (file_exists(realpath(__DIR__.'/../../../../app/middleware/register.php'))) {
+            return require_once realpath(__DIR__.'/../../../../app/middleware/register.php');
         }
 
         return [];
     }
 
     /**
-     * Get user defined dependencies
+     * Get user defined dependencies.
      *
      * @return array
      */
     protected function getUserDefinedDependencies()
     {
         $dependencies = getConfigPath('app', 'dependencies');
+
         return is_null($dependencies) ? [] : $dependencies;
     }
 
     /**
-     * combine all dependencies
+     * combine all dependencies.
      *
      * @return array
      */
-    protected function dependencies(){
+    protected function dependencies()
+    {
         $defaults = [
             \Legato\Framework\Request::class => 'shared',
         ];
@@ -146,8 +159,9 @@ class App
     /**
      * Resolve the given type from illuminate container.
      *
-     * @param  string  $type
-     * @param  array  $parameters (optional)
+     * @param string $type
+     * @param array  $parameters (optional)
+     *
      * @return mixed
      */
     public function construct($type, array $parameters = [])
@@ -158,14 +172,14 @@ class App
     /**
      * Call and inject its dependencies for the given class / method or closure.
      *
-     * @param  callable|string  $callback
-     * @param  array  $parameters (optional)
-     * @param  string|null  $defaultMethod (optional)
+     * @param callable|string $callback
+     * @param array           $parameters    (optional)
+     * @param string|null     $defaultMethod (optional)
+     *
      * @return mixed
      */
     public function execute($callback, array $parameters = [], $defaultMethod = null)
     {
         return $this->container->call($callback, $parameters, $defaultMethod);
     }
-
 }

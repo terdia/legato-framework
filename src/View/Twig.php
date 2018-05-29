@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
+
 namespace Legato\Framework;
 
 class Twig extends View
 {
-
     private $config;
 
     /**
@@ -13,6 +22,7 @@ class Twig extends View
      * @param $view
      * @param $data
      * @param $options
+     *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -27,8 +37,8 @@ class Twig extends View
         ];
 
         $twig = new \Twig_Environment($loader, $options);
-    
-        /**
+
+        /*
          * Load global extensions
          */
         $this->registerExtension($twig);
@@ -37,30 +47,31 @@ class Twig extends View
     }
 
     /**
-     * Get extensions defined by application developer
+     * Get extensions defined by application developer.
      *
      * @return array
      */
     protected function getExtensions()
     {
-        if(file_exists(realpath(__DIR__ . '/../../../../../config/twig.php'))){
-            $this->config = require realpath(__DIR__ . '/../../../../../config/twig.php');
-        }else{
-            $this->config = require realpath(__DIR__ . '/../../config/twig.php');
+        if (file_exists(realpath(__DIR__.'/../../../../../config/twig.php'))) {
+            $this->config = require realpath(__DIR__.'/../../../../../config/twig.php');
+        } else {
+            $this->config = require realpath(__DIR__.'/../../config/twig.php');
         }
-        return isset($this->config['extensions'])? $this->config['extensions'] : [] ;
+
+        return isset($this->config['extensions']) ? $this->config['extensions'] : [];
     }
 
     /**
-     * Register twig extensions
+     * Register twig extensions.
      *
      * @param \Twig_Environment $twig
      */
     private function registerExtension(\Twig_Environment $twig)
     {
         $extensions = $this->getExtensions();
-        if( count($extensions) ) {
-            foreach ( $extensions as $key => $extension ){
+        if (count($extensions)) {
+            foreach ($extensions as $key => $extension) {
                 $this->load($twig, $key, $extension);
             }
         }
@@ -73,10 +84,10 @@ class Twig extends View
      */
     private function load(\Twig_Environment $twig, $key, $extension)
     {
-        if($key == 'debug' && 'false' === config('APP_DEBUG')) {
+        if ($key == 'debug' && 'false' === config('APP_DEBUG')) {
             //
-        }else{
-            $twig->addExtension(new $extension);
+        } else {
+            $twig->addExtension(new $extension());
         }
     }
 }

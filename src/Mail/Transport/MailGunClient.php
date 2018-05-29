@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
 
 namespace Legato\Framework\Mail;
 
@@ -9,28 +18,28 @@ use Swift_Mime_SimpleMessage;
 class MailGunClient
 {
     /**
-     * Registered mailgun domain
+     * Registered mailgun domain.
      *
-     * @var $domain
+     * @var
      */
     private $domain;
 
     /**
-     * The Mailgun Url to post to
+     * The Mailgun Url to post to.
      *
-     * @var $endPoint
+     * @var
      */
     private $endPoint;
 
     /**
-     * GuzzleHttp Client
+     * GuzzleHttp Client.
      *
      * @var
      */
     private $httpClient;
 
     /**
-     * Mailgun API key
+     * Mailgun API key.
      *
      * @var
      */
@@ -38,7 +47,7 @@ class MailGunClient
 
     public function __construct()
     {
-        $this->httpClient = new Client;
+        $this->httpClient = new Client();
         $this->domain = getenv('MAILGUN_DOMAIN');
         $this->apiKey = getenv('MAILGUN_SECRET');
     }
@@ -57,8 +66,8 @@ class MailGunClient
                 $this->key(),
             ],
             'multipart' => [
-                [ 'name' => 'to', 'contents' => $to, ],
-                [ 'name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime',],
+                ['name' => 'to', 'contents' => $to],
+                ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
             ],
         ]);
 
@@ -68,7 +77,8 @@ class MailGunClient
     /**
      * Combine all contacts for the message.
      *
-     * @param  \Swift_Mime_SimpleMessage  $message
+     * @param \Swift_Mime_SimpleMessage $message
+     *
      * @return array
      */
     protected function combineTo(Swift_Mime_SimpleMessage $message)
@@ -79,23 +89,23 @@ class MailGunClient
     }
 
     /**
-     * Format the to addresses to match Mailgun message.mime format
+     * Format the to addresses to match Mailgun message.mime format.
      *
      * @param Swift_Mime_SimpleMessage $message
+     *
      * @return string
      */
     protected function prepareTo(Swift_Mime_SimpleMessage $message)
     {
-        $to = array_map(function($name, $address){
+        $to = array_map(function ($name, $address) {
             return $name ? $name." <{$address}>" : $address;
         }, $this->combineTo($message), array_keys($this->combineTo($message)));
 
         return implode(',', $to);
-
     }
 
     /**
-     * Set the Mailgun post URL (endpoint)
+     * Set the Mailgun post URL (endpoint).
      */
     public function setEndpoint()
     {
@@ -103,7 +113,7 @@ class MailGunClient
     }
 
     /**
-     * Get the API key for Mailgun
+     * Get the API key for Mailgun.
      *
      * @return mixed
      */

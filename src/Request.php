@@ -1,9 +1,19 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
+
 namespace Legato\Framework;
 
-use Symfony\Component\HttpFoundation\Request as HttpFoundation;
 use Legato\Framework\Session\Session;
+use Symfony\Component\HttpFoundation\Request as HttpFoundation;
 
 class Request extends HttpFoundation
 {
@@ -16,15 +26,17 @@ class Request extends HttpFoundation
         $this->instance = $this->getRequestInstance();
     }
 
-    public function getRequestInstance(){
+    public function getRequestInstance()
+    {
         return HttpFoundation::createFromGlobals();
     }
 
     /**
-     * Get a request parameter by key
+     * Get a request parameter by key.
      *
      * @param $key
      * @param bool $default
+     *
      * @return bool|mixed
      */
     public function input($key, $default = false)
@@ -34,7 +46,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get the request uri
+     * Get the request uri.
      *
      * @return string
      */
@@ -44,7 +56,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get the request path
+     * Get the request path.
      *
      * @return string
      */
@@ -54,7 +66,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * get all request data by request type
+     * get all request data by request type.
      *
      * @return array
      */
@@ -64,7 +76,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * get the request data base on request method
+     * get the request data base on request method.
      *
      * @return \Symfony\Component\HttpFoundation\ParameterBag
      */
@@ -75,7 +87,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * The ip address of the client
+     * The ip address of the client.
      *
      * @return null|string
      */
@@ -85,7 +97,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * User agent of the client
+     * User agent of the client.
      *
      * @return string|string[]
      */
@@ -95,10 +107,11 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get specific header
+     * Get specific header.
      *
      * @param $key
      * @param bool $default
+     *
      * @return bool|string|string[]
      */
     public function getHeader($key, $default = false)
@@ -107,7 +120,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Set header
+     * Set header.
      *
      * @param $key
      * @param $value
@@ -118,7 +131,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get session through request
+     * Get session through request.
      *
      * @return null|\Symfony\Component\HttpFoundation\Session\SessionInterface
      */
@@ -128,7 +141,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get the real request method
+     * Get the real request method.
      *
      * @return string
      */
@@ -138,7 +151,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get all the data from PHP $_FILES super global
+     * Get all the data from PHP $_FILES super global.
      *
      * @return \Symfony\Component\HttpFoundation\ServerBag
      */
@@ -148,7 +161,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get all the data from PHP $_COOKIES super global
+     * Get all the data from PHP $_COOKIES super global.
      *
      * @return \Symfony\Component\HttpFoundation\ServerBag
      */
@@ -158,7 +171,7 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get all the data from PHP $_SERVER super global
+     * Get all the data from PHP $_SERVER super global.
      *
      * @return \Symfony\Component\HttpFoundation\ServerBag
      */

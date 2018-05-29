@@ -1,30 +1,38 @@
 <?php
 
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
 
 namespace Legato\Framework\Validator;
-
 
 class ErrorHandler
 {
     private static $error = [];
 
     /**
-     * Set specific error
+     * Set specific error.
      *
      * @param $error
      * @param null $key
      */
     public static function set($error, $key = null)
     {
-        if($key){
+        if ($key) {
             static::$error[$key][] = $error;
-        }else{
+        } else {
             static::$error[] = $error;
         }
     }
 
     /**
-     * Return true if there is validation error
+     * Return true if there is validation error.
      *
      * @return bool
      */
@@ -34,7 +42,7 @@ class ErrorHandler
     }
 
     /**
-     * Return all validation errors
+     * Return all validation errors.
      *
      * @return array
      */
@@ -44,21 +52,22 @@ class ErrorHandler
     }
 
     /**
-     * Set and returns default custom validation messages
+     * Set and returns default custom validation messages.
      *
      * @param array $custom
+     *
      * @return array
      */
     public static function getValidationMessages($custom = [])
     {
-        $default = (array) require_once __DIR__ .'/messages.php';
+        $default = (array) require_once __DIR__.'/messages.php';
 
-        foreach ($custom as $key => $value){
-            if(array_key_exists($key, $default))
-            {
+        foreach ($custom as $key => $value) {
+            if (array_key_exists($key, $default)) {
                 $default[$key] = $value;
             }
         }
+
         return $default;
     }
 }

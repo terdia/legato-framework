@@ -1,7 +1,17 @@
 <?php
+
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
+
 namespace Framework\Tests;
 
-use Legato\Framework\Security\CSRFProtection;
 use Legato\Framework\WelcomeCommand;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
@@ -9,19 +19,18 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class ConsoleTest extends TestCase
 {
-
     /**
      * @test
      */
     public function welcomeCommand()
     {
-        $app = new Application;
-        $app->add(new WelcomeCommand);
+        $app = new Application();
+        $app->add(new WelcomeCommand());
         $command = $app->find('welcome:greet');
-        
+
         $symphonyCommandTester = new CommandTester($command);
         $symphonyCommandTester->execute([]);
-        
+
         $this->assertSame('Welcome to the Legato Framework', $symphonyCommandTester->getDisplay());
     }
 
@@ -35,11 +44,10 @@ class ConsoleTest extends TestCase
 
         $this->assertSame(true, $console);
 
-        if(defined('PHPUNIT_RUNNING')){
+        if (defined('PHPUNIT_RUNNING')) {
             $test = PHPUNIT_RUNNING;
         }
 
         $this->assertSame(true, $test);
     }
-
 }

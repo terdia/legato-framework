@@ -1,29 +1,35 @@
 <?php
 
-namespace Legato\Framework;
+/*
+ * This file is part of the Legato package.
+ *
+ * (c) Osayawe Ogbemudia Terry <terry@devscreencast.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ */
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
+namespace Legato\Framework;
 
 class CreatePhpUnitTest extends AbstractFileGenerator
 {
     /**
-     *
      * @var string
      */
     protected $commandName = 'add:unitTest';
-    
+
     protected $description = 'Create a new phpunit test class';
-    
+
     protected $basePath;
-    
+
     /**
-     * Type of file to be generated
+     * Type of file to be generated.
+     *
      * @var string
      */
     protected $type = 'test';
-    
+
     public function __construct()
     {
         parent::__construct();
