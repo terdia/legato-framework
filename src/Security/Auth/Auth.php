@@ -90,7 +90,7 @@ class Auth
      */
     public static function logout()
     {
-        session()->invalidate(0);
+        session()->invalidate();
         setcookie('remember_token', null, time() - 3600);
         $instance = new static();
 

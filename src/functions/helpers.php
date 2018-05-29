@@ -214,7 +214,15 @@ if (!function_exists('user')) {
      */
     function user()
     {
-        return \Legato\Framework\Security\Auth::user();
+        $user = \Legato\Framework\Security\Auth::user();
+
+        if(!$user) {
+            $user = \Legato\Framework\Security\Auth::remembered(
+                \Legato\Framework\Request::createFromGlobals()
+            );
+        }
+
+        return $user;
     }
 }
 
