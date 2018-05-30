@@ -216,7 +216,7 @@ if (!function_exists('user')) {
     {
         $user = \Legato\Framework\Security\Auth::user();
 
-        if(!$user) {
+        if (!$user) {
             $user = \Legato\Framework\Security\Auth::remembered(
                 \Legato\Framework\Request::createFromGlobals()
             );
