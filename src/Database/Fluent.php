@@ -16,20 +16,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fluent extends Model
 {
-
     public static function paginated($perPage, $options = [], $query = null)
     {
         $request = new Request();
 
-        if(is_null($query)) {
+        if (is_null($query)) {
             $query = 'page';
         }
 
-        if(!isset($options['path'])){
+        if (!isset($options['path'])) {
             $options['path'] = $request->path();
         }
 
-        $currentPage = $request->input($query)?: '1';
+        $currentPage = $request->input($query) ?: '1';
+
         return new Paginator(static::all(), $perPage, $currentPage, $options);
     }
 }
