@@ -13,6 +13,7 @@
 namespace Legato\Framework;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Fluent extends Model
 {
