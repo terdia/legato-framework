@@ -20,7 +20,8 @@ class Fluent extends Model
      * @param $perPage
      * @param array $item
      * @param array $options
-     * @param null $query
+     * @param null  $query
+     *
      * @return Paginator
      */
     public static function paginated($perPage, $item = [], $options = [], $query = null)
@@ -31,8 +32,7 @@ class Fluent extends Model
             $query = 'page';
         }
 
-        if(!count($item))
-        {
+        if (!count($item)) {
             $item = static::all();
         }
 
@@ -57,26 +57,24 @@ class Fluent extends Model
      * @param $perPage
      * @param array $item
      * @param array $options
-     * @param null $query
+     * @param null  $query
+     *
      * @return SimplePaginator
      */
     public static function paginateBasic($perPage, $item = [], $options = [], $query = null)
     {
         $request = new Request();
 
-        if (is_null($query))
-        {
+        if (is_null($query)) {
             $query = 'page';
         }
 
-        if(!count($item))
-        {
+        if (!count($item)) {
             $item = static::all();
         }
 
         $currentPage = $request->input($query, null);
-        if (is_null($currentPage))
-        {
+        if (is_null($currentPage)) {
             $currentPage = 1;
         }
 
