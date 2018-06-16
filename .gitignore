@@ -5,7 +5,7 @@ resources
 .idea
 composer.lock
 config
-cache
+/cache
 routes
 *.pdf
 
