@@ -36,7 +36,7 @@ class SimplePaginator extends LaraPaginator
         $blade = new LaravelBlade($this->viewPath, $this->cache);
 
         return new HtmlString($blade->view()->make($view, array_merge($data, [
-            'paginator' => $this
+            'paginator' => $this,
         ]))->render());
     }
 }
