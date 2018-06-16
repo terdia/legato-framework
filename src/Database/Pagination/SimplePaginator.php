@@ -12,15 +12,15 @@
 
 namespace Legato\Framework;
 
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator as LaraPaginator;
 use Illuminate\Support\HtmlString;
 use Philo\Blade\Blade as LaravelBlade;
 
-class Paginator extends LengthAwarePaginator
+class SimplePaginator extends LaraPaginator
 {
     protected $viewPath = __DIR__.'/views';
     protected $cache = __DIR__.'/cache';
-    protected $view = 'bootstrap-4';
+    protected $view = 'simple-bootstrap-4';
 
     public function links($view = null, $data = [])
     {
@@ -37,7 +37,6 @@ class Paginator extends LengthAwarePaginator
 
         return new HtmlString($blade->view()->make($view, array_merge($data, [
             'paginator' => $this,
-            'elements'  => $this->elements(),
         ]))->render());
     }
 }

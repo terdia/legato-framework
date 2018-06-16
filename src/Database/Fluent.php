@@ -16,7 +16,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fluent extends Model
 {
-    public static function paginated($perPage, $options = [], $query = null)
+    /**
+     * @param $perPage
+     * @param array $item
+     * @param array $options
+     * @param null  $query
+     *
+     * @return Paginator
+     */
+    public static function paginated($perPage, $item = [], $options = [], $query = null)
     {
         $request = new Request();
 
@@ -24,12 +32,59 @@ class Fluent extends Model
             $query = 'page';
         }
 
+        if (!count($item)) {
+            $item = static::all();
+        }
+
+        $currentPage = $request->input($query, null);
+        if (is_null($currentPage)) {
+            $currentPage = 1;
+        }
+
+        $collection = new Collection($item);
+        $currentPageResults = $collection->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
         if (!isset($options['path'])) {
             $options['path'] = $request->path();
         }
 
-        $currentPage = $request->input($query) ?: '1';
+        return new Paginator(
+            $currentPageResults, count($collection), $perPage, $currentPage, $options
+        );
+    }
 
-        return new Paginator(static::all(), $perPage, $currentPage, $options);
+    /**
+     * @param $perPage
+     * @param array $item
+     * @param array $options
+     * @param null  $query
+     *
+     * @return SimplePaginator
+     */
+    public static function paginateBasic($perPage, $item = [], $options = [], $query = null)
+    {
+        $request = new Request();
+
+        if (is_null($query)) {
+            $query = 'page';
+        }
+
+        if (!count($item)) {
+            $item = static::all();
+        }
+
+        $currentPage = $request->input($query, null);
+        if (is_null($currentPage)) {
+            $currentPage = 1;
+        }
+
+        $collection = new Collection($item);
+        $currentPageResults = $collection->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
+        if (!isset($options['path'])) {
+            $options['path'] = $request->path();
+        }
+
+        return new SimplePaginator($currentPageResults, $perPage, $currentPage, $options);
     }
 }
