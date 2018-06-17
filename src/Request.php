@@ -85,10 +85,8 @@ class Request extends HttpFoundation
         $data = $this->instance->getRealMethod() == 'GET' ? HttpFoundation::createFromGlobals()->query :
             HttpFoundation::createFromGlobals()->request;
 
-        if($data)
-        {
-            foreach ($data->all() as $key => $value)
-            {
+        if ($data) {
+            foreach ($data->all() as $key => $value) {
                 session()->createFlashMessage($key, $value);
             }
 
@@ -193,18 +191,18 @@ class Request extends HttpFoundation
     }
 
     /**
-     * Get old request value from session
+     * Get old request value from session.
      *
      * @param $key
+     *
      * @return string
      */
     public static function old($key = null)
     {
-
-        if(is_null($key)) {
-            return session()->getFlashMessage('request')?:'';
+        if (is_null($key)) {
+            return session()->getFlashMessage('request') ?: '';
         }
 
-        return session()->getFlashMessage($key)?:'';
+        return session()->getFlashMessage($key) ?: '';
     }
 }
