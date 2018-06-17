@@ -49,17 +49,62 @@ if (!function_exists('redirectTo')) {
     }
 }
 
-/*
- * @deprecated
- */
 if (!function_exists('flash')) {
-    function flash(Session $session, $name):string
+    /**
+     * Add or get item from session flash bag.
+     *
+     * @param $key
+     * @param null $value
+     *
+     * @return mixed
+     */
+    function flash($key, $value = null)
     {
-        foreach ($session->getFlashBag()->get($name, []) as $message) {
+        /*
+         * add item to session flash bag
+         */
+        if ($value) {
+            return session()->getFlashBag()->add($key, $value);
+        }
+
+        /*
+         * get an item from session flash bag
+         */
+        foreach (session()->getFlashBag()->get($key, []) as $message) {
             return $message ?: null;
         }
 
         return '';
+    }
+}
+
+if (!function_exists('old')) {
+
+    /**
+     * Get old request value from session.
+     *
+     * @param $key
+     *
+     * @return bool|mixed
+     */
+    function old($key)
+    {
+        return \Legato\Framework\Request::old($key);
+    }
+}
+
+if (!function_exists('request')) {
+
+    /**
+     * Get value from request.
+     *
+     * @param $key
+     *
+     * @return bool|mixed
+     */
+    function request($key = null)
+    {
+        return \Legato\Framework\Request::old($key);
     }
 }
 

@@ -82,8 +82,18 @@ class Request extends HttpFoundation
      */
     public function getRequestInputByType()
     {
-        return $this->instance->getRealMethod() == 'GET' ? HttpFoundation::createFromGlobals()->query :
+        $data = $this->instance->getRealMethod() == 'GET' ? HttpFoundation::createFromGlobals()->query :
             HttpFoundation::createFromGlobals()->request;
+
+        if ($data) {
+            foreach ($data->all() as $key => $value) {
+                session()->createFlashMessage($key, $value);
+            }
+
+            session()->createFlashMessage('request', $data);
+        }
+
+        return $data;
     }
 
     /**
@@ -178,5 +188,21 @@ class Request extends HttpFoundation
     public function server()
     {
         return $this->instance->server;
+    }
+
+    /**
+     * Get old request value from session.
+     *
+     * @param $key
+     *
+     * @return string
+     */
+    public static function old($key = null)
+    {
+        if (is_null($key)) {
+            return session()->getFlashMessage('request') ?: '';
+        }
+
+        return session()->getFlashMessage($key) ?: '';
     }
 }
