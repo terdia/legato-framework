@@ -78,6 +78,34 @@ if (!function_exists('flash')) {
     }
 }
 
+if (!function_exists('old')) {
+
+    /**
+     * Get old request value from session
+     *
+     * @param $key
+     * @return bool|mixed
+     */
+    function old($key)
+    {
+        return \Legato\Framework\Request::old($key);
+    }
+}
+
+if (!function_exists('request')) {
+
+    /**
+     * Get value from request
+     *
+     * @param $key
+     * @return bool|mixed
+     */
+    function request($key = null)
+    {
+        return \Legato\Framework\Request::old($key);
+    }
+}
+
 if (!function_exists('config')) {
     /**
      * Get value from environment variable or default.
