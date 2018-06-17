@@ -49,13 +49,28 @@ if (!function_exists('redirectTo')) {
     }
 }
 
-/*
- * @deprecated
- */
 if (!function_exists('flash')) {
-    function flash(Session $session, $name):string
+    /**
+     * Add or get item from session flash bag
+     *
+     * @param $key
+     * @param null $value
+     * @return mixed
+     */
+    function flash($key, $value = null)
     {
-        foreach ($session->getFlashBag()->get($name, []) as $message) {
+        /**
+         * add item to session flash bag
+         */
+        if($value)
+        {
+            return session()->getFlashBag()->add($key, $value);
+        }
+
+        /**
+         * get an item from session flash bag
+         */
+        foreach (session()->getFlashBag()->get($key, []) as $message) {
             return $message ?: null;
         }
 
