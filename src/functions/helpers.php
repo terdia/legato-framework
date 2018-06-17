@@ -51,23 +51,23 @@ if (!function_exists('redirectTo')) {
 
 if (!function_exists('flash')) {
     /**
-     * Add or get item from session flash bag
+     * Add or get item from session flash bag.
      *
      * @param $key
      * @param null $value
+     *
      * @return mixed
      */
     function flash($key, $value = null)
     {
-        /**
+        /*
          * add item to session flash bag
          */
-        if($value)
-        {
+        if ($value) {
             return session()->getFlashBag()->add($key, $value);
         }
 
-        /**
+        /*
          * get an item from session flash bag
          */
         foreach (session()->getFlashBag()->get($key, []) as $message) {
