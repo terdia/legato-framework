@@ -282,9 +282,8 @@ if (!function_exists('getConfigPath')) {
      */
     function getConfigPath($path, $key = null)
     {
-        if(!file_exists(realpath(__DIR__.'/../../../../../config/'.$path.'.php')))
-        {
-            return null;
+        if (!file_exists(realpath(__DIR__.'/../../../../../config/'.$path.'.php'))) {
+            return;
         }
         $path = require realpath(__DIR__.'/../../../../../config/'.$path.'.php');
         if ($key == null) {

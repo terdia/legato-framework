@@ -91,8 +91,6 @@ class Encryption
         if ($cipher === static::SUPPORTED_CIPHER_16) {
             return random_bytes(static::SUPPORTED_CIPHER_16_LENGTH);
         }
-
-        return null;
     }
 
     /**
