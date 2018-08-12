@@ -77,7 +77,7 @@ class Auth
                 $authConfig = getConfigPath('app', 'auth');
 
                 return Gate::user($authConfig, $decrypted);
-            } catch (\Exception $ex) {
+            } catch (Exception $ex) {
                 return false;
             }
         }
@@ -92,9 +92,7 @@ class Auth
     {
         session()->invalidate();
         setcookie('remember_token', null, time() - 3600);
-        $instance = new static();
-
-        redirectTo($instance->getLogOutRedirectPath());
+        redirectTo((new static())->getLogOutRedirectPath());
     }
 
     /**
@@ -104,9 +102,7 @@ class Auth
      */
     protected function getLogOutRedirectPath()
     {
-        $instance = static::getInstance();
-
-        return $instance->logoutRedirectTo;
+        return static::getInstance()->loginRedirectTo;
     }
 
     /**
@@ -116,9 +112,7 @@ class Auth
      */
     protected function getLoginRedirectPath()
     {
-        $instance = static::getInstance();
-
-        return $instance->loginRedirectTo;
+        return static::getInstance()->loginRedirectTo;
     }
 
     /**
@@ -148,13 +142,6 @@ class Auth
 
     public function getInstance()
     {
-        if (isset($this)) {
-            $obj = $this;
-        }
-        if (!isset($obj)) {
-            $obj = new static();
-        }
-
-        return $obj;
+        return isset($this) ? $this : new static();
     }
 }

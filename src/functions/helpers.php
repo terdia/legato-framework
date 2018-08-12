@@ -24,7 +24,7 @@ if (!function_exists('view')) {
      * @throws Twig_Error_Runtime
      * @throws Twig_Error_Syntax
      */
-    function view($view, $data = [], $options = []):void
+    function view($view, $data = [], $options = [])
     {
         getenv('FRAMEWORK') == 'developer' ? $path_to_views = realpath(__DIR__.'/../../resources/views') :
             $path_to_views = realpath(__DIR__.'/../../../../../resources/views');
@@ -282,8 +282,11 @@ if (!function_exists('getConfigPath')) {
      */
     function getConfigPath($path, $key = null)
     {
+        if(!file_exists(realpath(__DIR__.'/../../../../../config/'.$path.'.php')))
+        {
+            return null;
+        }
         $path = require realpath(__DIR__.'/../../../../../config/'.$path.'.php');
-
         if ($key == null) {
             return $path;
         }
