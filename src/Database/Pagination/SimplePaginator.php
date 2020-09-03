@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework;
+namespace Legato\Framework\Database\Pagination;
 
 use Illuminate\Pagination\Paginator as LaraPaginator;
 use Illuminate\Support\HtmlString;

@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework\Session;
+namespace Legato\Framework;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 

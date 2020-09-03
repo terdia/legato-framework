@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework;
+namespace Legato\Framework\Console\Interfaces;
 
 interface TemplateGenerator
 {

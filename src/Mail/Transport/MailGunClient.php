@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework\Mail;
+namespace Legato\Framework\Mail\Transport;
 
 use GuzzleHttp\Client;
 use Swift_Mime_SimpleMessage;
