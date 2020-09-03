@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework;
+namespace Legato\Framework\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

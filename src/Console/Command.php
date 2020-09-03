@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework;
+namespace Legato\Framework\Console;
 
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputArgument;

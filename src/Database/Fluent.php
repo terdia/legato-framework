@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework;
+namespace Legato\Framework\Database;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;

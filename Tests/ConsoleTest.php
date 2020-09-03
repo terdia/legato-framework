@@ -12,7 +12,7 @@
 
 namespace Framework\Tests;
 
-use Legato\Framework\WelcomeCommand;
+use Legato\Framework\Console\WelcomeCommand;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;

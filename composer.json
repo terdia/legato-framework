@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Legato\\Framework\\":""
+            "Legato\\Framework\\":"src/"
         },
         "files":["src/functions/helpers.php"]
     },
@@ -25,7 +25,7 @@
         }
     },
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "illuminate/container": "^5.5",
         "vlucas/phpdotenv": "^2.4",
         "twig/twig": "^2.4",

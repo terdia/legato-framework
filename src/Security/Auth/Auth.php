@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework\Security;
+namespace Legato\Framework\Security\Auth;
 
 use Exception;
 use Legato\Framework\Request;

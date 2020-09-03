@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework\Mail;
+namespace Legato\Framework\Mail\Transport;
 
 use Swift_Mailer;
 use Swift_SmtpTransport;

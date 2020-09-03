@@ -10,7 +10,7 @@
  *
  */
 
-namespace Legato\Framework;
+namespace Legato\Framework\Database;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
